@@ -17,7 +17,7 @@ public class Login {
 
         do {
             System.out.println("Press 1 for provider login.\n" +
-                    "Press 2 for manager login.\n");
+                    "Press 2 for manager login.");
             while(!loginInput.hasNextInt()){
                 System.out.println("Invalid selection.");
                 loginInput.next();
@@ -43,14 +43,24 @@ public class Login {
         boolean found = false;
 
         do{
-            System.out.println("Enter your provider ID or press x to return to main menu.\n");
-            if(Objects.equals(loginID.next(), "x")){
+            System.out.println("Enter your provider ID or press x to return to main menu.");
+
+            if(!loginID.hasNextInt() && loginID.hasNext("x")){
                 loginMainMenu();
                 break;
             }
+
             while(!loginID.hasNextInt()){
-                System.out.println("Invalid ID.");
+                System.out.println("Invalid ID. Please try again or press x to return to the main menu.");
+                if (loginID.hasNext("x")) {
+                    loginMainMenu();
+                    break;
+                }
+                loginID.next();
             }
+
+
+
             ID = loginID.nextInt();
 
             //check id here
