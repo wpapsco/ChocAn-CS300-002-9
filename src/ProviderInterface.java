@@ -3,12 +3,12 @@ import java.util.Scanner;
 //              - member IDs are always positive integers
 
 public class ProviderInterface {
-    public static DatabaseInterface database;
+    private static DatabaseInterface database;
     private static int ID;
     ProviderInterface(DatabaseInterface database, int ID){this.database = database; this.ID = ID;}
 
     //clears the standard output device by printing a bunch of newlines
-    public final static void clearConsole(){
+    private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
                 "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }

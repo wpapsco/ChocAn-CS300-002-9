@@ -1,12 +1,12 @@
 import java.util.Scanner;
 
 public class ManagerInterface {
-    public static DatabaseInterface database;
+    private static DatabaseInterface database;
 
     ManagerInterface(DatabaseInterface database){this.database = database;}
 
     //clears the standard output device by printing a bunch of newlines
-    public final static void clearConsole(){
+    private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
                 "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }

@@ -2,11 +2,11 @@ import java.util.Scanner;
 
 
 public class Login {
-    public static DatabaseInterface database;
+    private static DatabaseInterface database;
     Login(){this.database = new DatabaseInterface(/*database constructor args here, if any*/);}
 
     //clears the standard output device by printing a bunch of newlines
-    public final static void clearConsole(){
+    private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
                 "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
@@ -20,7 +20,7 @@ public class Login {
         }
     }
 
-    public static void loginMainMenu(){
+    private static void loginMainMenu(){
         Scanner loginInput = new Scanner(System.in);
         int loginKey;
 
@@ -79,7 +79,7 @@ public class Login {
         account.main(null);
     }
 
-    public static void ManagerLogin(){
+    private static void ManagerLogin(){
         ManagerInterface account = new ManagerInterface(database/*constructor args*/);
         account.main(null);
     }
