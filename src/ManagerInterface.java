@@ -5,15 +5,16 @@ public class ManagerInterface {
 
     ManagerInterface(DatabaseInterface database){this.database = database;}
 
-    //clears the standard output device
-    //code from Abhishek Kashyap on stackoverflow.com
+    //clears the standard output device by printing a bunch of newlines
     public final static void clearConsole(){
-        try{
+
+        System.out.println("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n");
+        /*try{
             if(System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             else
                 System.out.print("\033\143");
-        } catch(final Exception e){}
+        } catch(final Exception e){}*/
     }
 
     //Menu interface
