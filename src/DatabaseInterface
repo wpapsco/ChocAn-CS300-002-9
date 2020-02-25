@@ -2,5 +2,5 @@
 //data repository
 
 class DatabaseInterface {
-
+    int temp;
 }
