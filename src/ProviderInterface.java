@@ -101,22 +101,19 @@ public class ProviderInterface {
             }
         } while(memberID == 0);
 
-    /*
-    // Lookup member in database, return status or no match
-    int databaseRetValue = callDatabaseFunction(memberID);
-
-    switch(databaseRetValue) {
-    case 1:
-    System.out.println("Invalid Number");
-    break;
-    case 2:
-    System.out.println("Validated");
-    break;
-    case 3:
-    System.out.println("Member suspended");
-    break;
-    }
-    */
+        // Lookup member in database, return status or no match
+        int databaseRetValue = callDatabaseFunction(memberID);
+        switch(databaseRetValue) {
+            case 1:
+                System.out.println("Invalid Number");
+                break;
+            case 2:
+                System.out.println("Validated");
+                break;
+            case 3:
+                System.out.println("Member suspended");
+                break;
+        }
     }
 
     // Charge a member for a service
