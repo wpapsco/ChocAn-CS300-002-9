@@ -1,6 +1,5 @@
 //This file defines the DatabaseInterface class which interfaces with the
 //data repository
 
-class DatabaseInterface {
-    int temp;
+public class DatabaseInterface {
 }
