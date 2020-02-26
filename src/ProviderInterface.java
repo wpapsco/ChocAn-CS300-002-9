@@ -13,13 +13,13 @@ public class ProviderInterface {
                 "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
-    //Menu interface
+    //Menu driver
     public static void main(String[] args){
         Scanner userIn = new Scanner(System.in);
         int selection = 0;
 
+        clearConsole();
         while(true){
-            clearConsole();
             //validate user selection
             boolean valid = false;
             do{
@@ -43,16 +43,19 @@ public class ProviderInterface {
             switch (selection) {
                 //still need to catch and process return values
                 case 1: checkID();
-                    valid = true;
                     break;
-                case 2: chargeMember();
-                    valid = true;
+                case 2: if(logService()) {
+                    clearConsole();
+                    System.out.println("\nService recorded.");
+                }
+                        else {
+                    clearConsole();
+                    System.out.println("\nAborted service record.");
+                }
                     break;
                 case 3: checkProviderDirectory();
-                    valid = true;
                     break;
                 case 4: serviceReport();
-                    valid = true;
                     break;
                 case 5: return;
                 //should never reach default, if we do, something went wrong
@@ -63,8 +66,7 @@ public class ProviderInterface {
 
     //print provider options menu to System.out
     private static void printMenu(){
-        System.out.println(
-                "1. Check member status.\n" +
+        System.out.println("1. Check member status.\n" +
                         "2. Log a service.\n" +
                         "3. Lookup service by name.\n" +
                         "4. Generate service report(last 7 days).\n" +
@@ -72,7 +74,7 @@ public class ProviderInterface {
                         "Make a selection: ");
     }
 
-    // Check member ID number for status (valid, suspended, or invalid)
+    // Check member ID number for status (valid: 1, suspended: 2, or invalid: 3)
     private static void checkID(){
         Scanner sc = new Scanner(System.in);
         int memberID = 0;
@@ -86,11 +88,11 @@ public class ProviderInterface {
             try {
                 memberID = Integer.parseInt(input);
             } catch (NumberFormatException ex) {
-                System.out.println("Invalid Number.");
+                System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
             if(memberID < 0) {
-                System.out.println("Invalid Number.");
+                System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
         } while(memberID == 0);
@@ -100,13 +102,13 @@ public class ProviderInterface {
         int databaseRetValue = callDatabaseFunction(memberID);
         switch(databaseRetValue) {
             case 1:
-                System.out.println("Invalid Number");
+                System.out.println("Validated.");
                 break;
             case 2:
-                System.out.println("Validated");
+                System.out.println("Member suspended.");
                 break;
             case 3:
-                System.out.println("Member suspended");
+                System.out.println("Not a recognized member ID.");
                 break;
         }*/
     }
@@ -117,11 +119,15 @@ public class ProviderInterface {
     }
 
     //log a service to the database
-    private static int logService(){
+    private static boolean logService(){
         ServiceRecord log = new ServiceRecord();
         Scanner in = new Scanner(System.in);
+        int temp = 0;
 
-        return 0;
+        temp = in.nextInt();
+        if(temp == 3)
+            return true;
+        else return false;
     }
 
     // Lookup a service and print the service name, code, and fee if valid
