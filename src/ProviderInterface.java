@@ -141,37 +141,51 @@ public class ProviderInterface {
         }
 
         //valid member ID
-        else {
+        else{
             ServiceRecord log = new ServiceRecord();
             Scanner in = new Scanner(System.in);
             log.memberID = member;
             int serviceID = 0;
+            boolean gettingService = true;
 
+            //get service code
             clearConsole();
-            do {
-                System.out.println("Enter the service code: ");
-                String input = in.nextLine();
+            while(gettingService){
+                do {
+                    System.out.println("Enter the service code or enter \"x\" to abort: ");
+                    if(in.hasNext("x"))
+                        return false;
+                    String input = in.nextLine();
 
-                // service code ID must be a positive int
-                try {
-                    serviceID = Integer.parseInt(input);
-                } catch (NumberFormatException ex) {
-                    clearConsole();
-                    System.out.println("Invalid Number. Service codes are positive numerals.");
-                    serviceID = 0;
-                }
-                if(serviceID < 0) {
-                    clearConsole();
-                    System.out.println("Invalid Number. Service codes are positive numerals.");
-                    serviceID = 0;
-                }
-            } while(serviceID == 0);
+                    // service code ID must be a positive int
+                    try {
+                        serviceID = Integer.parseInt(input);
+                    } catch (NumberFormatException ex) {
+                        clearConsole();
+                        System.out.println("Invalid Number. Service codes are positive numerals.");
+                        serviceID = 0;
+                    }
+                    if (serviceID < 0) {
+                        clearConsole();
+                        System.out.println("Invalid Number. Service codes are positive numerals.");
+                        serviceID = 0;
+                    }
+                } while (serviceID == 0);
 
-            //check with database interface if service code is valid, if so, the database should return true.
-            if(true/*placeholder. database search for service ID func call here*/){
-                log.serviceID = serviceID;
-                log.providerID = ID;
-            }
+                //check with database interface if service code is valid, if so, the database should return true.
+                if (true/*placeholder. database search for service ID func call here*/) {
+                    log.serviceID = serviceID;
+                    log.providerID = ID;
+                }
+                else {
+                    clearConsole();
+                    System.out.println("Service not found.");
+                }
+            }   //Finished getting service code
+
+            //get date of service
+
+
             return true;
         }
     }
