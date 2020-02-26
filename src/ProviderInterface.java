@@ -85,18 +85,21 @@ public class ProviderInterface {
         int memberID = 0;
 
         // Loop until user enters reasonable member ID
+        clearConsole();
         do {
-            System.out.print("Enter member ID: ");
+            System.out.print("Enter member ID to validate: ");
             String input = sc.nextLine();
 
             // member ID must be a positive int
             try {
                 memberID = Integer.parseInt(input);
             } catch (NumberFormatException ex) {
+                clearConsole();
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
             if(memberID < 0) {
+                clearConsole();
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
@@ -164,9 +167,11 @@ public class ProviderInterface {
                 }
             } while(serviceID == 0);
 
-
-
-
+            //check with database interface if service code is valid, if so, the database should return true.
+            if(true/*placeholder. database search for service ID func call here*/){
+                log.serviceID = serviceID;
+                log.providerID = ID;
+            }
             return true;
         }
     }
