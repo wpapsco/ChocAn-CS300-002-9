@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.regex.PatternSyntaxException;
 // Assumptions: - 0 is an invalid member ID
 //              - member IDs are always positive integers
 
@@ -142,17 +143,71 @@ public class ProviderInterface {
 
         //valid member ID
         else{
+            clearConsole();
+            System.out.println("Validated.");
             ServiceRecord log = new ServiceRecord();
             Scanner in = new Scanner(System.in);
             log.memberID = member;
             int serviceID = 0;
-            boolean gettingService = true;
+            boolean gettingInput = true;
+            int month = 0;
+            int day = 0;
+            int year = 0;
+
+            //get date of service
+            clearConsole();
+            while(gettingInput){
+                boolean confirmed = false;
+                String date[] = null;
+                do {
+                    System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
+                    if(in.hasNext("x"))
+                        return false;
+                    String input = in.nextLine();
+                    try {
+                        date = input.split("-", 4);
+                    } catch (PatternSyntaxException ex) {
+                        //this exception shouldn't be thrown as the delimiter is static but if it is we handle it here.
+                    }
+                    // month must be between 1 and 12(inclusive).
+                    try {
+                        month = Integer.parseInt(date[0]);
+                        day = Integer.parseInt(date[1]);
+                        year = Integer.parseInt(date[2]);
+                    } catch (NumberFormatException ex) {
+                        clearConsole();
+                        System.out.println("Invalid input. Format may be incorrect.");
+                    }
+                    //check for valid range of for month and day
+                    if (month < 1 || month > 12 || day < 1 || day > 31 || (year % 4 != 0 && month == 2 && day > 28) || (month == 2 && day > 29) || (month == 4 || month == 6 || month == 9 || month == 11 && day > 30)) {
+                        clearConsole();
+                        System.out.println("Invalid month or day.");
+                    }
+                    else {
+
+                    }
+                    confirmed = true;
+                } while (!confirmed);
+
+                //check with database interface if service code is valid, if so, the database should return true.
+                if (true/*placeholder. database search for service ID func call here*/) {
+                    log.serviceID = serviceID;
+                    log.providerID = ID;
+                    gettingInput = false;
+                }
+                else {
+                    clearConsole();
+                    System.out.println("Service not found.");
+                }
+            }   //Finished getting service code
+            gettingInput = true;
+
 
             //get service code
             clearConsole();
-            while(gettingService){
+            while(gettingInput){
                 do {
-                    System.out.println("Enter the service code or enter \"x\" to abort: ");
+                    System.out.print("Enter the service code or enter \"x\" to abort: ");
                     if(in.hasNext("x"))
                         return false;
                     String input = in.nextLine();
@@ -176,14 +231,15 @@ public class ProviderInterface {
                 if (true/*placeholder. database search for service ID func call here*/) {
                     log.serviceID = serviceID;
                     log.providerID = ID;
+                    gettingInput = false;
                 }
                 else {
                     clearConsole();
                     System.out.println("Service not found.");
                 }
             }   //Finished getting service code
+            gettingInput = true;
 
-            //get date of service
 
 
             return true;
