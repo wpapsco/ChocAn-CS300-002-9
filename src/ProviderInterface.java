@@ -42,14 +42,19 @@ public class ProviderInterface {
             //process user selection
             switch (selection) {
                 //still need to catch and process return values
-                case 1: checkID();
+                case 1: int validMember = checkID();
+                    if(validMember == -1)
+                        System.out.println("Member ID not recognized.");
+                    else if (validMember == -2)
+                        System.out.println("Suspended.");
+                    else
+                        System.out.println("Validated.");
                     break;
                 case 2: if(logService()) {
                     clearConsole();
                     System.out.println("\nService recorded.");
                 }
-                        else {
-                    clearConsole();
+                else {
                     System.out.println("\nAborted service record.");
                 }
                     break;
@@ -67,15 +72,15 @@ public class ProviderInterface {
     //print provider options menu to System.out
     private static void printMenu(){
         System.out.println("1. Check member status.\n" +
-                        "2. Log a service.\n" +
-                        "3. Lookup service by name.\n" +
-                        "4. Generate service report(last 7 days).\n" +
-                        "5. Logout.\n" +
-                        "Make a selection: ");
+                "2. Log a service.\n" +
+                "3. Lookup service by name.\n" +
+                "4. Generate service report(last 7 days).\n" +
+                "5. Logout.\n" +
+                "Make a selection: ");
     }
 
-    // Check member ID number for status (valid: 1, suspended: 2, or invalid: 3)
-    private static void checkID(){
+    // Check member ID number for status (valid: member ID is returned, suspended: -2, or invalid: -1)
+    private static int checkID(){
         Scanner sc = new Scanner(System.in);
         int memberID = 0;
 
@@ -102,32 +107,68 @@ public class ProviderInterface {
         int databaseRetValue = callDatabaseFunction(memberID);
         switch(databaseRetValue) {
             case 1:
-                System.out.println("Validated.");
+                return 1;
                 break;
             case 2:
                 System.out.println("Member suspended.");
+                return 2;
                 break;
-            case 3:
-                System.out.println("Not a recognized member ID.");
+            case 3: return 3;
                 break;
         }*/
-    }
-
-    // Charge a member for a service
-    private static int chargeMember(){
-        return 0;
+        //return ID if valid, this return value is a placeholder until the database is integrated.
+        return memberID;
     }
 
     //log a service to the database
     private static boolean logService(){
-        ServiceRecord log = new ServiceRecord();
-        Scanner in = new Scanner(System.in);
-        int temp = 0;
+        int member = checkID();
+        //member ID not recognized
+        if(member == -1){
+            clearConsole();
+            System.out.println("Member ID not recognized.");
+            return false;
+        }
 
-        temp = in.nextInt();
-        if(temp == 3)
+        //Suspended member ID
+        else if(member == -2){
+            clearConsole();
+            System.out.println("Member is suspended.");
+            return false;
+        }
+
+        //valid member ID
+        else {
+            ServiceRecord log = new ServiceRecord();
+            Scanner in = new Scanner(System.in);
+            log.memberID = member;
+            int serviceID = 0;
+
+            clearConsole();
+            do {
+                System.out.println("Enter the service code: ");
+                String input = in.nextLine();
+
+                // service code ID must be a positive int
+                try {
+                    serviceID = Integer.parseInt(input);
+                } catch (NumberFormatException ex) {
+                    clearConsole();
+                    System.out.println("Invalid Number. Service codes are positive numerals.");
+                    serviceID = 0;
+                }
+                if(serviceID < 0) {
+                    clearConsole();
+                    System.out.println("Invalid Number. Service codes are positive numerals.");
+                    serviceID = 0;
+                }
+            } while(serviceID == 0);
+
+
+
+
             return true;
-        else return false;
+        }
     }
 
     // Lookup a service and print the service name, code, and fee if valid
