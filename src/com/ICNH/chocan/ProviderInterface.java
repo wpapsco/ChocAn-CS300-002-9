@@ -1,4 +1,7 @@
-import java.util.Calendar;
+package com.ICNH.chocan;
+
+import com.ICNH.chocan.records.ServiceRecord;
+
 import java.util.Scanner;
 import java.util.regex.PatternSyntaxException;
 // Assumptions: - 0 is an invalid member ID
@@ -210,7 +213,7 @@ public class ProviderInterface {
                     if (in.hasNext("Y") || in.hasNext("y")) {
                         confirmed = true;
                         in.nextLine();
-                        log.dateProvided.set(year, month - 1, day);
+                        log.serviceDate.set(year, month - 1, day);
                     }
                     //date not accurate
                     else if (in.hasNext("N") || in.hasNext("n")) {
