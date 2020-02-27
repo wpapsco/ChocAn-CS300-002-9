@@ -3,66 +3,68 @@ package com.ICNH.chocan;
 import java.util.Scanner;
 
 public class ManagerInterface {
-    private static DatabaseInterface database;
+    private DatabaseInterface database;
 
-    ManagerInterface(DatabaseInterface database){this.database = database;}
-
-    //clears the standard output device by printing a bunch of newlines
-    private static void clearConsole(){
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    ManagerInterface(DatabaseInterface database) {
+        this.database = database;
     }
 
     //Menu interface
-    public static void main(String[] args){
+    public void menu() {
         Scanner userIn = new Scanner(System.in);
         int selection = 0;
 
-        while(true){
-            clearConsole();
+        while (true) {
+            Utilities.clearConsole();
             //validate user selection
             boolean valid = false;
-            do{
+            do {
                 printMenu();
-                while(!userIn.hasNextInt()){
-                    clearConsole();
+                while (!userIn.hasNextInt()) {
+                    Utilities.clearConsole();
                     System.out.println("Invalid selection.\n");
                     userIn.next();
                     printMenu();
                 }
                 selection = userIn.nextInt();
-                if(selection >= 1 && selection <= 5)
+                if (selection >= 1 && selection <= 5)
                     valid = true;
-                else{
-                    clearConsole();
+                else {
+                    Utilities.clearConsole();
                     System.out.println("Invalid selection.\n");
                 }
-            } while(!valid);
+            } while (!valid);
 
             //process user selection
             switch (selection) {
                 //still need to catch and process return values
-                case 1: providerReport();
+                case 1:
+                    providerReport();
                     valid = true;
                     break;
-                case 2: memberReport();
+                case 2:
+                    memberReport();
                     valid = true;
                     break;
-                case 3: editProvider();
+                case 3:
+                    editProvider();
                     valid = true;
                     break;
-                case 4: editMember();
+                case 4:
+                    editMember();
                     valid = true;
                     break;
-                case 5: return;
+                case 5:
+                    return;
                 //should never reach default, if we do, something went wrong
-                default: assert false;
+                default:
+                    assert false;
             }
         }
     }
 
     //print manager options menu to System.out
-    private static void printMenu(){
+    private void printMenu() {
         System.out.println(
                 "1. Compile a service report for each provider.\n" +
                         "2. Compile a service report for each member.\n" +
@@ -71,26 +73,27 @@ public class ManagerInterface {
                         "5. Logout.\n" +
                         "Make a selection: ");
     }
+
     // Create a provider report and save to an external data file
-    private static int providerReport(){
+    private int providerReport() {
         System.out.println("Provider report not implemented yet!");
         return 0;
     }
 
     // Create a member report and save to an external data file
-    private static int memberReport(){
+    private int memberReport() {
         System.out.println("Member report not implemented yet!");
         return 0;
     }
 
     // Add, remove, or update member information
-    private static int editMember(){
+    private int editMember() {
         System.out.println("Edit member not implemented yet!");
         return 0;
     }
 
     // Add, remove, or update provider records
-    private static int editProvider(){
+    private int editProvider() {
         System.out.println("Edit provider not implemented yet!");
         return 0;
     }

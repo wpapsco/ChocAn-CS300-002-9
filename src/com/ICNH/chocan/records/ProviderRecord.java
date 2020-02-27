@@ -8,7 +8,8 @@ public class ProviderRecord {
     public String state;
     public String zip;
 
-    public ProviderRecord() {}
+    public ProviderRecord() {
+    }
 
     public ProviderRecord(int ID, String name, String address, String city, String state, String zip) {
         this.ID = ID;
