@@ -2,6 +2,9 @@ package com.ICNH.chocan;
 
 import com.ICNH.chocan.records.ServiceRecord;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.PatternSyntaxException;
 // Assumptions: - 0 is an invalid member ID
@@ -165,74 +168,34 @@ public class ProviderInterface {
             // please check out https://mkyong.com/java/how-to-convert-string-to-date-java/ probably a lot easier and less error-prone
             // will also save this file from 67 lines of code to read -will
 
-            //get date of service
-            boolean confirmed = false;
-            String date[] = null;
-            do {
+            // got bored and did it myself, I highly recommend using this piece of code -will
+
+            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+            formatter.setLenient(false); //disallows dates like 13-22-2019 -> 1/22/2020
+            Date theDate = null;
+            while (theDate == null) {
                 System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
-                if (in.hasNext("x"))
-                    return false;
-                String input = in.nextLine();
+                if (in.hasNext("x")) return false;
                 try {
-                    date = input.split("-", 4);
-                } catch (PatternSyntaxException ex) {
-                    //this exception shouldn't be thrown as the delimiter is static but if it is we can handle it here.
-                }
-                // month must be between 1 and 12(inclusive).
-                try {
-                    month = Integer.parseInt(date[0]);
-                    day = Integer.parseInt(date[1]);
-                    year = Integer.parseInt(date[2]);
-                } catch (NumberFormatException ex) {
-                    Utilities.clearConsole();
+                    //read and parse date
+                    theDate = formatter.parse(in.nextLine());
+                } catch (ParseException e) {
+                    //format is incorrect, so we re-start the loop
                     System.out.println("Invalid input. Format may be incorrect.");
+                    continue;
                 }
-                //check for valid range of month and day
-                if (month < 1 || month > 12 || day < 1 || day > 31 || (year % 4 != 0 && month == 2 && day > 28) || (month == 2 && day > 29) || ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)) {
-                    Utilities.clearConsole();
-                    System.out.println("Invalid month or day.");
+                //check if date is in the future
+                if (theDate.after(new Date())) {
+                    System.out.println("Date may not be in the future.");
+                    theDate = null;
+                    continue;
                 }
-
-                //valid input for service date
-                else {
-                    Utilities.clearConsole();
-                    if (month < 10) {
-                        if (day < 10)
-                            System.out.print("Confirm that the following date is the date this service was provided: 0" + month + "-0" + day + "-" + year + "?" +
-                                    "\n(Y/N): ");
-                        else
-                            System.out.print("Confirm that the following date is the date this service was provided: 0" + month + "-" + day + "-" + year + "?" +
-                                    "\n(Y/N): ");
-                    } else {
-                        if (day < 10)
-                            System.out.print("Confirm that the following date is the date this service was provided: " + month + "-0" + day + "-" + year + "?" +
-                                    "\n(Y/N): ");
-                        else
-                            System.out.print("Confirm that the following date is the date this service was provided: " + month + "-" + day + "-" + year + "?" +
-                                    "\n(Y/N): ");
-                    }
-
-                    //date is accurate
-                    while (!in.hasNext("Y") && !in.hasNext("y") && !in.hasNext("N") && !in.hasNext("n")) {
-                        in.nextLine();
-                        System.out.print("\nPlease enter Y or N for yes or no: ");
-                    }
-                    if (in.hasNext("Y") || in.hasNext("y")) {
-                        confirmed = true;
-                        in.nextLine();
-                        log.serviceDate.set(year, month - 1, day);
-                    }
-                    //date not accurate
-                    else if (in.hasNext("N") || in.hasNext("n")) {
-                        Utilities.clearConsole();
-                        System.out.println("Incorrect date.");
-                        in.nextLine();
-                        month = 0;
-                        day = 0;
-                        year = 0;
-                    }
+                //confirm the date is correct
+                System.out.println("Confirm that the following date is the date this service was provided: " + formatter.format(theDate));
+                if (!Utilities.confirm()) {
+                    theDate = null;
                 }
-            } while (!confirmed); //date of service has been entered and confirmed by user
+            }
 
             //get service code
             boolean gettingInput = true;
