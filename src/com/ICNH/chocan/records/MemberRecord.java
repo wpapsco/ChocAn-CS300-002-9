@@ -9,7 +9,8 @@ public class MemberRecord {
     public String state;
     public String zip;
 
-    public MemberRecord() {}
+    public MemberRecord() {
+    }
 
     public MemberRecord(int ID, String name, boolean valid, String address, String city, String state, String zip) {
         this.ID = ID;

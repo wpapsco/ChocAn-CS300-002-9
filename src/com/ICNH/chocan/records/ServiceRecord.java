@@ -11,9 +11,10 @@ public class ServiceRecord {
     public Calendar serviceDate;
     public Calendar currentDate;
 
-    public ServiceRecord() {}
+    public ServiceRecord() {
+    }
 
-    public ServiceRecord(int serviceID, int memberID, int providerID, String comments, Calendar serviceDate){
+    public ServiceRecord(int serviceID, int memberID, int providerID, String comments, Calendar serviceDate) {
         currentDate = Calendar.getInstance();
         this.serviceID = serviceID;
         this.memberID = memberID;

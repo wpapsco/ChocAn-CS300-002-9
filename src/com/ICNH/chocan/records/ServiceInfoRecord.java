@@ -6,7 +6,8 @@ public class ServiceInfoRecord {
     public String description;
     public int fee;
 
-    public ServiceInfoRecord() {}
+    public ServiceInfoRecord() {
+    }
 
     public ServiceInfoRecord(int id, String name, String description, int fee) {
         this.id = id;
