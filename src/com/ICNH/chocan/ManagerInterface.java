@@ -7,25 +7,19 @@ public class ManagerInterface {
 
     ManagerInterface(DatabaseInterface database){this.database = database;}
 
-    //clears the standard output device by printing a bunch of newlines
-    private static void clearConsole(){
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    }
-
     //Menu interface
     public static void main(String[] args){
         Scanner userIn = new Scanner(System.in);
         int selection = 0;
 
         while(true){
-            clearConsole();
+            Utilities.clearConsole();
             //validate user selection
             boolean valid = false;
             do{
                 printMenu();
                 while(!userIn.hasNextInt()){
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Invalid selection.\n");
                     userIn.next();
                     printMenu();
@@ -34,7 +28,7 @@ public class ManagerInterface {
                 if(selection >= 1 && selection <= 5)
                     valid = true;
                 else{
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Invalid selection.\n");
                 }
             } while(!valid);

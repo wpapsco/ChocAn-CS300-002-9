@@ -12,25 +12,19 @@ public class ProviderInterface {
     private static int ID;
     ProviderInterface(DatabaseInterface database, int ID){this.database = database; this.ID = ID;}
 
-    //clears the standard output device by printing a bunch of newlines
-    private static void clearConsole(){
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    }
-
     //Menu driver
     public static void main(String[] args){
         Scanner userIn = new Scanner(System.in);
         int selection = 0;
 
-        clearConsole();
+        Utilities.clearConsole();
         while(true){
             //validate user selection
             boolean valid = false;
             do{
                 printMenu();
                 while(!userIn.hasNextInt()){
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Invalid selection.\n");
                     userIn.next();
                     printMenu();
@@ -39,7 +33,7 @@ public class ProviderInterface {
                 if(selection >= 1 && selection <= 5)
                     valid = true;
                 else{
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Invalid selection.\n");
                 }
             } while(!valid);
@@ -56,7 +50,7 @@ public class ProviderInterface {
                         System.out.println("Validated.");
                     break;
                 case 2: if(logService()) {
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("\nService recorded.");
                 }
                 else {
@@ -90,7 +84,7 @@ public class ProviderInterface {
         int memberID = 0;
 
         // Loop until user enters reasonable member ID
-        clearConsole();
+        Utilities.clearConsole();
         do {
             System.out.print("Enter member ID to validate: ");
             String input = sc.nextLine();
@@ -99,12 +93,12 @@ public class ProviderInterface {
             try {
                 memberID = Integer.parseInt(input);
             } catch (NumberFormatException ex) {
-                clearConsole();
+                Utilities.clearConsole();
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
             if(memberID <= 0) {
-                clearConsole();
+                Utilities.clearConsole();
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
@@ -133,21 +127,21 @@ public class ProviderInterface {
         int member = checkID();
         //member ID not recognized
         if(member == -1){
-            clearConsole();
+            Utilities.clearConsole();
             System.out.println("Member ID not recognized.");
             return false;
         }
 
         //Suspended member ID
         else if(member == -2){
-            clearConsole();
+            Utilities.clearConsole();
             System.out.println("Member is suspended.");
             return false;
         }
 
         //valid member ID
         else{
-            clearConsole();
+            Utilities.clearConsole();
             System.out.println("Validated.");
             ServiceRecord log = new ServiceRecord();
             Scanner in = new Scanner(System.in);
@@ -177,18 +171,18 @@ public class ProviderInterface {
                     day = Integer.parseInt(date[1]);
                     year = Integer.parseInt(date[2]);
                 } catch (NumberFormatException ex) {
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Invalid input. Format may be incorrect.");
                 }
                 //check for valid range of month and day
                 if (month < 1 || month > 12 || day < 1 || day > 31 || (year % 4 != 0 && month == 2 && day > 28) || (month == 2 && day > 29) || ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)) {
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Invalid month or day.");
                 }
 
                 //valid input for service date
                 else {
-                    clearConsole();
+                    Utilities.clearConsole();
                     if (month < 10) {
                         if (day < 10)
                             System.out.print("Confirm that the following date is the date this service was provided: 0" + month + "-0" + day + "-" + year + "?" +
@@ -217,7 +211,7 @@ public class ProviderInterface {
                     }
                     //date not accurate
                     else if (in.hasNext("N") || in.hasNext("n")) {
-                        clearConsole();
+                        Utilities.clearConsole();
                         System.out.println("Incorrect date.");
                         in.nextLine();
                         month = 0;
@@ -230,7 +224,7 @@ public class ProviderInterface {
             //get service code
             boolean gettingInput = true;
             String input = null;
-            clearConsole();
+            Utilities.clearConsole();
             while(gettingInput){
                 do {
                     boolean done = false;
@@ -262,12 +256,12 @@ public class ProviderInterface {
                     try {
                         serviceID = Integer.parseInt(input);
                     } catch (NumberFormatException ex) {
-                        clearConsole();
+                        Utilities.clearConsole();
                         System.out.println("Invalid Number. Service codes are positive numerals.");
                         serviceID = 0;
                     }
                     if (serviceID <= 0) {
-                        clearConsole();
+                        Utilities.clearConsole();
                         System.out.println("Invalid Number. Service codes are positive numerals.");
                         serviceID = 0;
                     }
@@ -286,12 +280,12 @@ public class ProviderInterface {
                         in.nextLine();
                     }
                     else if (in.hasNext("N") || in.hasNext("n")) {
-                        clearConsole();
+                        Utilities.clearConsole();
                         in.nextLine();
                     }
                 }
                 else {
-                    clearConsole();
+                    Utilities.clearConsole();
                     System.out.println("Service code " + serviceID + " not found in directory.");
                     serviceID = 0;  //set serviceID back to 0 when we loop through again
                 }

@@ -5,18 +5,14 @@ import java.util.Scanner;
 
 public class Login {
     private static DatabaseInterface database;
-    Login(){this.database = new DatabaseInterface(/*database constructor args here, if any*/);}
-
-    //clears the standard output device by printing a bunch of newlines
-    private static void clearConsole(){
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    Login(){
+        this.database = new DatabaseInterface(/*database constructor args here, if any*/);
     }
 
     //Main loops through the login menu - the outermost scope of the software
     public static void main(String[] args){
         while(true){
-            clearConsole();
+            Utilities.clearConsole();
             System.out.println("Welcome to ChocAn!");
             loginMainMenu();
         }
@@ -31,7 +27,7 @@ public class Login {
                     "2. Manager login.\n" +
                     "Make a selection: ");
             while(!loginInput.hasNextInt()){
-                clearConsole();
+                Utilities.clearConsole();
                 System.out.println("Invalid selection.\n");
                 loginInput.next();
                 System.out.print("1. Provider login.\n" +
@@ -40,7 +36,7 @@ public class Login {
             }
             loginKey = loginInput.nextInt();
             if(loginKey != 1 && loginKey != 2){
-                clearConsole();
+                Utilities.clearConsole();
                 System.out.println("Invalid selection.\n");
             }
         } while (loginKey != 1 && loginKey != 2);
@@ -64,7 +60,7 @@ public class Login {
             while(!loginID.hasNextInt()){
                 if(loginID.hasNext("x"))
                     return;
-                clearConsole();
+                Utilities.clearConsole();
                 System.out.println("Invalid ID, please enter a valid Provider ID.");
                 System.out.print("Enter your provider ID to login, or \"x\" to return to main menu: ");
                 loginID.next();
