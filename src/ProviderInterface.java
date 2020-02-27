@@ -1,3 +1,4 @@
+import java.util.Calendar;
 import java.util.Scanner;
 import java.util.regex.PatternSyntaxException;
 // Assumptions: - 0 is an invalid member ID
@@ -99,7 +100,7 @@ public class ProviderInterface {
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
-            if(memberID < 0) {
+            if(memberID <= 0) {
                 clearConsole();
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
@@ -148,69 +149,111 @@ public class ProviderInterface {
             ServiceRecord log = new ServiceRecord();
             Scanner in = new Scanner(System.in);
             log.memberID = member;
+            log.providerID = ID;
             int serviceID = 0;
-            boolean gettingInput = true;
             int month = 0;
             int day = 0;
             int year = 0;
 
             //get date of service
-            clearConsole();
-            while(gettingInput){
-                boolean confirmed = false;
-                String date[] = null;
-                do {
-                    System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
-                    if(in.hasNext("x"))
-                        return false;
-                    String input = in.nextLine();
-                    try {
-                        date = input.split("-", 4);
-                    } catch (PatternSyntaxException ex) {
-                        //this exception shouldn't be thrown as the delimiter is static but if it is we handle it here.
-                    }
-                    // month must be between 1 and 12(inclusive).
-                    try {
-                        month = Integer.parseInt(date[0]);
-                        day = Integer.parseInt(date[1]);
-                        year = Integer.parseInt(date[2]);
-                    } catch (NumberFormatException ex) {
-                        clearConsole();
-                        System.out.println("Invalid input. Format may be incorrect.");
-                    }
-                    //check for valid range of for month and day
-                    if (month < 1 || month > 12 || day < 1 || day > 31 || (year % 4 != 0 && month == 2 && day > 28) || (month == 2 && day > 29) || (month == 4 || month == 6 || month == 9 || month == 11 && day > 30)) {
-                        clearConsole();
-                        System.out.println("Invalid month or day.");
-                    }
-                    else {
-
-                    }
-                    confirmed = true;
-                } while (!confirmed);
-
-                //check with database interface if service code is valid, if so, the database should return true.
-                if (true/*placeholder. database search for service ID func call here*/) {
-                    log.serviceID = serviceID;
-                    log.providerID = ID;
-                    gettingInput = false;
+            boolean confirmed = false;
+            String date[] = null;
+            do {
+                System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
+                if (in.hasNext("x"))
+                    return false;
+                String input = in.nextLine();
+                try {
+                    date = input.split("-", 4);
+                } catch (PatternSyntaxException ex) {
+                    //this exception shouldn't be thrown as the delimiter is static but if it is we can handle it here.
                 }
+                // month must be between 1 and 12(inclusive).
+                try {
+                    month = Integer.parseInt(date[0]);
+                    day = Integer.parseInt(date[1]);
+                    year = Integer.parseInt(date[2]);
+                } catch (NumberFormatException ex) {
+                    clearConsole();
+                    System.out.println("Invalid input. Format may be incorrect.");
+                }
+                //check for valid range of month and day
+                if (month < 1 || month > 12 || day < 1 || day > 31 || (year % 4 != 0 && month == 2 && day > 28) || (month == 2 && day > 29) || ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30)) {
+                    clearConsole();
+                    System.out.println("Invalid month or day.");
+                }
+
+                //valid input for service date
                 else {
                     clearConsole();
-                    System.out.println("Service not found.");
-                }
-            }   //Finished getting service code
-            gettingInput = true;
+                    if (month < 10) {
+                        if (day < 10)
+                            System.out.print("Confirm that the following date is the date this service was provided: 0" + month + "-0" + day + "-" + year + "?" +
+                                    "\n(Y/N): ");
+                        else
+                            System.out.print("Confirm that the following date is the date this service was provided: 0" + month + "-" + day + "-" + year + "?" +
+                                    "\n(Y/N): ");
+                    } else {
+                        if (day < 10)
+                            System.out.print("Confirm that the following date is the date this service was provided: " + month + "-0" + day + "-" + year + "?" +
+                                    "\n(Y/N): ");
+                        else
+                            System.out.print("Confirm that the following date is the date this service was provided: " + month + "-" + day + "-" + year + "?" +
+                                    "\n(Y/N): ");
+                    }
 
+                    //date is accurate
+                    while(!in.hasNext("Y") && !in.hasNext("y") && !in.hasNext("N") && !in.hasNext("n")){
+                        in.nextLine();
+                        System.out.print("\nPlease enter Y or N for yes or no: ");
+                    }
+                    if (in.hasNext("Y") || in.hasNext("y")) {
+                        confirmed = true;
+                        in.nextLine();
+                        log.dateProvided.set(year, month - 1, day);
+                    }
+                    //date not accurate
+                    else if (in.hasNext("N") || in.hasNext("n")) {
+                        clearConsole();
+                        System.out.println("Incorrect date.");
+                        in.nextLine();
+                        month = 0;
+                        day = 0;
+                        year = 0;
+                    }
+                }
+            } while (!confirmed); //date of service has been entered and confirmed by user
 
             //get service code
+            boolean gettingInput = true;
+            String input = null;
             clearConsole();
             while(gettingInput){
                 do {
-                    System.out.print("Enter the service code or enter \"x\" to abort: ");
-                    if(in.hasNext("x"))
-                        return false;
-                    String input = in.nextLine();
+                    boolean done = false;
+                    while(!done) {
+                        System.out.print("Enter the service code to continue, \"x\" to abort, or \"s\" to search for a service in the provider service directory: ");
+                        if (in.hasNext("x"))
+                            return false;
+                        else if (in.hasNext("s")) {
+                            in.nextLine();
+                            while (!checkProviderDirectory()) {
+                                System.out.print("A service with that name could not be found. Enter \"x\" to go back or any other key to search the directory again: ");
+                                if (in.hasNext("x")) {
+                                    in.nextLine();
+                                    break;
+                                }
+                                else {
+                                    in.nextLine();
+                                }
+                            }
+                        }
+                        else {
+                        //if(in.hasNext()) {
+                            input = in.nextLine();
+                            done = true;
+                        }
+                    }
 
                     // service code ID must be a positive int
                     try {
@@ -220,35 +263,50 @@ public class ProviderInterface {
                         System.out.println("Invalid Number. Service codes are positive numerals.");
                         serviceID = 0;
                     }
-                    if (serviceID < 0) {
+                    if (serviceID <= 0) {
                         clearConsole();
                         System.out.println("Invalid Number. Service codes are positive numerals.");
                         serviceID = 0;
                     }
                 } while (serviceID == 0);
 
-                //check with database interface if service code is valid, if so, the database should return true.
-                if (true/*placeholder. database search for service ID func call here*/) {
-                    log.serviceID = serviceID;
-                    log.providerID = ID;
-                    gettingInput = false;
+                //check with database interface if service code is valid, if so, the database should print the service info and return true.
+                if (checkProviderDirectory(serviceID)) {
+                    System.out.print("\nWas this the service provided? (Y/N): ");
+                    while(!in.hasNext("Y") && !in.hasNext("y") && !in.hasNext("N") && !in.hasNext("n")){
+                        in.nextLine();
+                        System.out.print("\nPlease enter Y or N for yes or no: ");
+                    }
+                    if (in.hasNext("Y") || in.hasNext("y")) {
+                        log.serviceID = serviceID;
+                        gettingInput = false;
+                        in.nextLine();
+                    }
+                    else if (in.hasNext("N") || in.hasNext("n")) {
+                        clearConsole();
+                        in.nextLine();
+                    }
                 }
                 else {
                     clearConsole();
-                    System.out.println("Service not found.");
+                    System.out.println("Service code " + serviceID + " not found in directory.");
+                    serviceID = 0;  //set serviceID back to 0 when we loop through again
                 }
             }   //Finished getting service code
-            gettingInput = true;
 
-
-
+            //get comments on the service from user, up to 100 chars.
             return true;
         }
     }
 
-    // Lookup a service and print the service name, code, and fee if valid
-    private static int checkProviderDirectory(){
-        return 0;
+    // asks the user for the name of a service and prints the service name, code, and fee if found.
+    private static boolean checkProviderDirectory(){
+        return true;
+    }
+
+    //takes a service code as an argument and prints the service name then returns true if found. Else returns false
+    private static boolean checkProviderDirectory(int serviceID){
+        return true;
     }
 
     //generates service report for the past 7 days

@@ -9,4 +9,6 @@ class ServiceRecord {
     String comments;
     Calendar dateProvided;
     Calendar dateLogged;
+
+    ServiceRecord(){dateProvided = Calendar.getInstance(); dateLogged = Calendar.getInstance();}
 }
