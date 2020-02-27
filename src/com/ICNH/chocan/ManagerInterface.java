@@ -1,3 +1,5 @@
+package com.ICNH.chocan;
+
 import java.util.Scanner;
 
 public class ManagerInterface {
