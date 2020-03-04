@@ -224,6 +224,6 @@ public class DatabaseInterface {
         statement.setString(4, record.comments);
         statement.setObject(5, new Timestamp(record.currentDate.getTime()));
         statement.setDate(6, new Date(record.serviceDate.getTime()));
-        return statement.execute();
+        return statement.execute(); //oops
     }
 }
