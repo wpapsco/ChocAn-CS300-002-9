@@ -175,6 +175,7 @@ public class ProviderInterface {
             Date theDate = null;
             while (theDate == null) {
                 System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
+                // abort if they type x
                 if (in.hasNext("x")) return false;
                 try {
                     //read and parse date
