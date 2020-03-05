@@ -1,14 +1,17 @@
 package com.ICNH.chocan;//This file defines the com.ICNH.ChocAn.DatabaseInterface class which interfaces with the
 //data repository
 
-import com.ICNH.chocan.records.FullServiceRecord;
-import com.ICNH.chocan.records.MemberRecord;
-import com.ICNH.chocan.records.ProviderRecord;
-import com.ICNH.chocan.records.ServiceInfoRecord;
+import com.ICNH.chocan.records.*;
+import com.mysql.cj.protocol.Resultset;
 import javafx.embed.swt.SWTFXUtils;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Member;
+import java.security.Provider;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DatabaseInterface {
     private final String username = "admin";
@@ -31,10 +34,14 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     private ServiceInfoRecord readServiceInfoRecord(ResultSet results) throws SQLException {
-        int id = results.getInt("id");
-        int fee = results.getInt("fee");
-        String name = results.getString("name");
-        String description = results.getString("description");
+        return readServiceInfoRecord(results, 1);
+    }
+    private ServiceInfoRecord readServiceInfoRecord(ResultSet results, int offset) throws SQLException {
+        int i = offset;
+        int id = results.getInt(i++);
+        String name = results.getString(i++);
+        String description = results.getString(i++);
+        int fee = results.getInt(i++);
         return new ServiceInfoRecord(id, name, description, fee);
     }
 
@@ -72,13 +79,17 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     private MemberRecord readMemberRecord(ResultSet results) throws SQLException {
-        int id = results.getInt("id");
-        String name = results.getString("name");
-        String address = results.getString("address");
-        String city = results.getString("city");
-        String state = results.getString("state");
-        String zip = results.getString("zip");
-        boolean valid = results.getInt("is_valid") == 1;
+        return readMemberRecord(results, 1);
+    }
+    private MemberRecord readMemberRecord(ResultSet results, int offset) throws SQLException {
+        int i = offset;
+        int id = results.getInt(i++);
+        String name = results.getString(i++);
+        String address = results.getString(i++);
+        String city = results.getString(i++);
+        String state = results.getString(i++);
+        String zip = results.getString(i++);
+        boolean valid = results.getInt(i++) == 1;
         return new MemberRecord(id, name, valid, address, city, state, zip);
     }
 
@@ -116,12 +127,16 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     private ProviderRecord readProviderRecord(ResultSet results) throws SQLException {
-        int id = results.getInt("id");
-        String name = results.getString("name");
-        String address = results.getString("address");
-        String city = results.getString("city");
-        String state = results.getString("state");
-        String zip = results.getString("zip");
+        return readProviderRecord(results, 1);
+    }
+    private ProviderRecord readProviderRecord(ResultSet results, int offset) throws SQLException {
+        int i = offset;
+        int id = results.getInt(i++);
+        String name = results.getString(i++);
+        String address = results.getString(i++);
+        String city = results.getString(i++);
+        String state = results.getString(i++);
+        String zip = results.getString(i++);
         return new ProviderRecord(id, name, address, city, state, zip);
     }
 
@@ -159,15 +174,119 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     public boolean validateMember(int id) throws SQLException {
-        return getMemberRecord(id) != null;
+        MemberRecord record = getMemberRecord(id);
+        return record != null && record.valid;
     }
 
-    //feel free to stub out more methods like this where you need them, I will implement them
+    public boolean validateProvider(int id) throws SQLException {
+        return getProviderRecord(id) != null;
+    }
+
+    private FullServiceRecord readFullServiceRecord(ResultSet results) throws SQLException {
+        FullServiceRecord record = new FullServiceRecord();
+        record.comments = results.getString(4);
+        record.currentDate = results.getDate(5);
+        record.serviceDate = results.getDate(6);
+        record.serviceInfo = readServiceInfoRecord(results, 7);
+        record.provider = readProviderRecord(results, 11);
+        record.member = readMemberRecord(results, 17);
+        return record;
+    }
+
+    //TODO: modify to add past 7 days feature depending on what's going on
+    private ArrayList<FullServiceRecord> getServices(int id, boolean provider) throws SQLException {
+        ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>(); //TODO
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM (((Services " +
+                        "INNER JOIN ServiceInfo ON Services.service_info = ServiceInfo.id) " +
+                        "INNER JOIN Providers ON Services.provider = Providers.id) " +
+                        "INNER JOIN Members ON Services.member = Members.id) " +
+                        "WHERE Services." + (provider ? "provider" : "member") + " = ?;");
+        statement.setInt(1, id);
+        ResultSet results = statement.executeQuery();
+        while (results.next()) {
+            records.add(readFullServiceRecord(results));
+        }
+        return records;
+    }
+
+    /**
+     * @param id the id of the provider
+     * @return the list of services provided by the provider
+     * @throws SQLException
+     */
     public ArrayList<FullServiceRecord> getServicesByProvider(int id) throws SQLException {
-        return new ArrayList<FullServiceRecord>(); //TODO
+        return getServices(id, true);
     }
 
+    /**
+     * @param id the id of the member
+     * @return the list of services received by the member
+     * @throws SQLException
+     */
     public ArrayList<FullServiceRecord> getServicesByMember(int id) throws SQLException {
-        return new ArrayList<FullServiceRecord>(); //TODO
+        return getServices(id, false);
+    }
+
+    /**
+     * @param name the name of the service (must match completely)
+     * @return the list of services that match
+     * @throws SQLException
+     */
+    public ArrayList<ServiceInfoRecord> getServicesByName(String name) throws SQLException {
+        ArrayList<ServiceInfoRecord> records = new ArrayList<>();
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM ServiceInfo WHERE name = ?);");
+        ResultSet results = statement.executeQuery();
+        while (results.next()) {
+            records.add(readServiceInfoRecord(results));
+        }
+        return records;
+    }
+
+    /**
+     * @param record the service record to insert into the database
+     * @return true if successful, false if unsuccessful
+     * @throws SQLException
+     */
+    public boolean insertService(ServiceRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO Services VALUES (?, ?, ?, ?, ?, ?);");
+        statement.setInt(1, record.providerID);
+        statement.setInt(2, record.memberID);
+        statement.setInt(3, record.serviceID);
+        statement.setString(4, record.comments);
+        statement.setObject(5, new Timestamp(record.currentDate.getTime()));
+        statement.setDate(6, new Date(record.serviceDate.getTime()));
+        return statement.execute();
+    }
+
+    /**
+     * @param record the member record to insert into the database
+     * @return true if successful, false if unsuccessful
+     * @throws SQLException
+     */
+    public boolean insertMember(MemberRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO Members (name, address, city, state, zip, is_valid) VALUES (?, ?, ?, ?, ?, ?);");
+        statement.setString(1, record.name);
+        statement.setString(2, record.address);
+        statement.setString(3, record.city);
+        statement.setString(4, record.state);
+        statement.setString(5, record.zip);
+        statement.setInt(6, record.valid ? 1 : 0);
+        return statement.execute();
+    }
+
+    /**
+     * @param record the provider record to insert into the database
+     * @return true if successful, false if unsuccessful
+     * @throws SQLException
+     */
+    public boolean insertProvider(ProviderRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO Providers (name, address, city, state, zip) VALUES (?, ?, ?, ?, ?);");
+        statement.setString(1, record.name);
+        statement.setString(2, record.address);
+        statement.setString(3, record.city);
+        statement.setString(4, record.state);
+        statement.setString(5, record.zip);
+        return statement.execute();
     }
 }
