@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Services` (
   `member` INT NULL,
   `service_info` INT NULL,
   `comments` VARCHAR(100) NULL,
-  `current_time` DATETIME NULL,
+  `cur_time` DATETIME NULL,
   `service_date` DATE NULL,
   INDEX `member_idx` (`member` ASC),
   INDEX `provider_idx` (`provider` ASC),
