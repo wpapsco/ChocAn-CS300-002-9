@@ -2,8 +2,10 @@ package com.ICNH.chocan;//This file defines the com.ICNH.ChocAn.DatabaseInterfac
 //data repository
 
 import com.ICNH.chocan.records.*;
+import com.mysql.cj.protocol.Resultset;
 import javafx.embed.swt.SWTFXUtils;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Member;
 import java.security.Provider;
 import java.sql.*;
@@ -191,6 +193,7 @@ public class DatabaseInterface {
         return record;
     }
 
+    //TODO: modify to add past 7 days feature depending on what's going on
     private ArrayList<FullServiceRecord> getServices(int id, boolean provider) throws SQLException {
         ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>(); //TODO
         PreparedStatement statement = connection.prepareStatement(
@@ -207,15 +210,44 @@ public class DatabaseInterface {
         return records;
     }
 
-    //feel free to stub out more methods like this where you need them, I will implement them
+    /**
+     * @param id the id of the provider
+     * @return the list of services provided by the provider
+     * @throws SQLException
+     */
     public ArrayList<FullServiceRecord> getServicesByProvider(int id) throws SQLException {
         return getServices(id, true);
     }
 
+    /**
+     * @param id the id of the member
+     * @return the list of services received by the member
+     * @throws SQLException
+     */
     public ArrayList<FullServiceRecord> getServicesByMember(int id) throws SQLException {
         return getServices(id, false);
     }
 
+    /**
+     * @param name the name of the service (must match completely)
+     * @return the list of services that match
+     * @throws SQLException
+     */
+    public ArrayList<ServiceInfoRecord> getServicesByName(String name) throws SQLException {
+        ArrayList<ServiceInfoRecord> records = new ArrayList<>();
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM ServiceInfo WHERE name = ?);");
+        ResultSet results = statement.executeQuery();
+        while (results.next()) {
+            records.add(readServiceInfoRecord(results));
+        }
+        return records;
+    }
+
+    /**
+     * @param record the service record to insert into the database
+     * @return true if successful, false if unsuccessful
+     * @throws SQLException
+     */
     public boolean insertService(ServiceRecord record) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO Services VALUES (?, ?, ?, ?, ?, ?);");
         statement.setInt(1, record.providerID);
@@ -224,6 +256,37 @@ public class DatabaseInterface {
         statement.setString(4, record.comments);
         statement.setObject(5, new Timestamp(record.currentDate.getTime()));
         statement.setDate(6, new Date(record.serviceDate.getTime()));
-        return statement.execute(); //oops
+        return statement.execute();
+    }
+
+    /**
+     * @param record the member record to insert into the database
+     * @return true if successful, false if unsuccessful
+     * @throws SQLException
+     */
+    public boolean insertMember(MemberRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO Members (name, address, city, state, zip, is_valid) VALUES (?, ?, ?, ?, ?, ?);");
+        statement.setString(1, record.name);
+        statement.setString(2, record.address);
+        statement.setString(3, record.city);
+        statement.setString(4, record.state);
+        statement.setString(5, record.zip);
+        statement.setInt(6, record.valid ? 1 : 0);
+        return statement.execute();
+    }
+
+    /**
+     * @param record the provider record to insert into the database
+     * @return true if successful, false if unsuccessful
+     * @throws SQLException
+     */
+    public boolean insertProvider(ProviderRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO Providers (name, address, city, state, zip) VALUES (?, ?, ?, ?, ?);");
+        statement.setString(1, record.name);
+        statement.setString(2, record.address);
+        statement.setString(3, record.city);
+        statement.setString(4, record.state);
+        statement.setString(5, record.zip);
+        return statement.execute();
     }
 }
