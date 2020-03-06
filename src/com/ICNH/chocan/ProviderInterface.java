@@ -2,6 +2,7 @@ package com.ICNH.chocan;
 
 import com.ICNH.chocan.records.ServiceRecord;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -93,7 +94,7 @@ public class ProviderInterface {
     // Check member ID number for status (valid: member ID is returned, suspended: -2, or invalid: -1)
     private int checkID() {
         Scanner sc = new Scanner(System.in);
-        int memberID = 0;
+        int memberID;
 
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
@@ -104,34 +105,34 @@ public class ProviderInterface {
             // member ID must be a positive int
             try {
                 memberID = Integer.parseInt(input);
+                if (memberID <= 0) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. Member ID's are positive numerals.");
+                    memberID = 0;
+                }
             } catch (NumberFormatException ex) {
-                Utilities.clearConsole();
-                System.out.println("Invalid Number. Member ID's are positive numerals.");
-                memberID = 0;
-            }
-            if (memberID <= 0) {
                 Utilities.clearConsole();
                 System.out.println("Invalid Number. Member ID's are positive numerals.");
                 memberID = 0;
             }
         } while (memberID == 0);
 
-        /*
         // Lookup member in database, return status or no match
-        int databaseRetValue = callDatabaseFunction(memberID);
-        switch(databaseRetValue) {
-            case 1:
-                return 1;
-                break;
-            case 2:
-                System.out.println("Member suspended.");
-                return 2;
-                break;
-            case 3: return 3;
-                break;
-        }*/
-        //return ID if valid, this return value is a placeholder until the database is integrated.
-        return memberID;
+        try {
+            int memberStatus = database.validateMember(memberID);
+            switch (memberStatus) {
+                case 1: // valid ID
+                    return memberID;
+                case 0: // suspended ID
+                    return -2;
+                case -1: // ID not found
+                    return -1;
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("Error: SQL Exception thrown");
+        }
+        return 0;
     }
 
     //log a service to the database

@@ -173,9 +173,14 @@ public class DatabaseInterface {
      * @return true if the id is valid, false if not
      * @throws SQLException
      */
-    public boolean validateMember(int id) throws SQLException {
+    public int validateMember(int id) throws SQLException {
         MemberRecord record = getMemberRecord(id);
-        return record != null && record.valid;
+        if(record != null && record.valid)
+            return 1;
+        if(record != null && !record.valid)
+            return 0;
+        if(record == null)
+            return -1;
     }
 
     public boolean validateProvider(int id) throws SQLException {
