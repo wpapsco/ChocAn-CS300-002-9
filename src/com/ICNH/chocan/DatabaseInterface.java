@@ -179,8 +179,7 @@ public class DatabaseInterface {
             return 1;
         if(record != null && !record.valid)
             return 0;
-        if(record == null)
-            return -1;
+        return -1;
     }
 
     public boolean validateProvider(int id) throws SQLException {
