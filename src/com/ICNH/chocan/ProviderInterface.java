@@ -1,5 +1,6 @@
 package com.ICNH.chocan;
 
+import com.ICNH.chocan.records.ServiceInfoRecord;
 import com.ICNH.chocan.records.ServiceRecord;
 
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.PatternSyntaxException;
+
 // Assumptions: - 0 is an invalid member ID
 //              - member IDs are always positive integers
 
@@ -23,7 +25,7 @@ public class ProviderInterface {
     //Menu driver
     public void menu() {
         Scanner userIn = new Scanner(System.in);
-        int selection = 0;
+        int selection;
 
         Utilities.clearConsole();
         while (true) {
@@ -70,7 +72,9 @@ public class ProviderInterface {
                     checkProviderDirectory();
                     break;
                 case 4:
-                    serviceReport();
+                    if(!serviceReport()){
+                        System.out.println("Unable to generate service report");
+                    }
                     break;
                 case 5:
                     return;
@@ -146,143 +150,158 @@ public class ProviderInterface {
         }
 
         //Suspended member ID
-        else if (member == -2) {
+        if (member == -2) {
             Utilities.clearConsole();
             System.out.println("Member is suspended.");
             return false;
         }
 
         //valid member ID
-        else {
-            Utilities.clearConsole();
-            System.out.println("Validated.");
-            ServiceRecord log = new ServiceRecord();
-            Scanner in = new Scanner(System.in);
-            log.memberID = member;
-            log.providerID = ID;
-            int serviceID = 0;
-            int month = 0;
-            int day = 0;
-            int year = 0;
+        Utilities.clearConsole();
+        System.out.println("Validated.");
+        ServiceRecord log = new ServiceRecord();
+        Scanner in = new Scanner(System.in);
+        log.memberID = member;
+        log.providerID = ID;
+        int serviceID;
 
+        // please check out https://mkyong.com/java/how-to-convert-string-to-date-java/ probably a lot easier and less error-prone
+        // will also save this file from 67 lines of code to read -will
 
-            // please check out https://mkyong.com/java/how-to-convert-string-to-date-java/ probably a lot easier and less error-prone
-            // will also save this file from 67 lines of code to read -will
+        // got bored and did it myself, I highly recommend using this piece of code -will
 
-            // got bored and did it myself, I highly recommend using this piece of code -will
-
-            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
-            formatter.setLenient(false); //disallows dates like 13-22-2019 -> 1/22/2020
-            Date theDate = null;
-            while (theDate == null) {
-                System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
-                // abort if they type x
-                if (in.hasNext("x")) return false;
-                try {
-                    //read and parse date
-                    theDate = formatter.parse(in.nextLine());
-                } catch (ParseException e) {
-                    //format is incorrect, so we re-start the loop
-                    System.out.println("Invalid input. Format may be incorrect.");
-                    continue;
-                }
-                //check if date is in the future
-                if (theDate.after(new Date())) {
-                    System.out.println("Date may not be in the future.");
-                    theDate = null;
-                    continue;
-                }
-                //confirm the date is correct
-                System.out.println("Confirm that the following date is the date this service was provided: " + formatter.format(theDate));
-                if (!Utilities.confirm()) {
-                    theDate = null;
-                }
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+        formatter.setLenient(false); //disallows dates like 13-22-2019 -> 1/22/2020
+        Date theDate = null;
+        while (theDate == null) {
+            System.out.print("Enter the date that the service was provided in MM-DD-YYYY format, or enter \"x\" to abort: ");
+            // abort if they type x
+            if (in.hasNext("x")) return false;
+            try {
+                //read and parse date
+                theDate = formatter.parse(in.nextLine());
+            } catch (ParseException e) {
+                //format is incorrect, so we re-start the loop
+                System.out.println("Invalid input. Format may be incorrect.");
+                theDate = null;
+                continue;
             }
-
-            //get service code
-            boolean gettingInput = true;
-            String input = null;
-            Utilities.clearConsole();
-            while (gettingInput) {
-                do {
-                    boolean done = false;
-                    while (!done) {
-                        System.out.print("Enter the service code to continue, \"x\" to abort, or \"s\" to search for a service in the provider service directory: ");
-                        if (in.hasNext("x"))
-                            return false;
-                        else if (in.hasNext("s")) {
-                            in.nextLine();
-                            while (!checkProviderDirectory()) {
-                                System.out.print("A service with that name could not be found. Enter \"x\" to go back or any other key to search the directory again: ");
-                                if (in.hasNext("x")) {
-                                    in.nextLine();
-                                    break;
-                                } else {
-                                    in.nextLine();
-                                }
-                            }
-                        } else {
-                            //if(in.hasNext()) {
-                            input = in.nextLine();
-                            done = true;
-                        }
-                    }
-
-                    // service code ID must be a positive int
-                    try {
-                        serviceID = Integer.parseInt(input);
-                    } catch (NumberFormatException ex) {
-                        Utilities.clearConsole();
-                        System.out.println("Invalid Number. Service codes are positive numerals.");
-                        serviceID = 0;
-                    }
-                    if (serviceID <= 0) {
-                        Utilities.clearConsole();
-                        System.out.println("Invalid Number. Service codes are positive numerals.");
-                        serviceID = 0;
-                    }
-                } while (serviceID == 0);
-
-                //check with database interface if service code is valid, if so, the database should print the service info and return true.
-                if (checkProviderDirectory(serviceID)) {
-                    System.out.print("\nWas this the service provided? (Y/N): ");
-                    while (!in.hasNext("Y") && !in.hasNext("y") && !in.hasNext("N") && !in.hasNext("n")) {
-                        in.nextLine();
-                        System.out.print("\nPlease enter Y or N for yes or no: ");
-                    }
-                    if (in.hasNext("Y") || in.hasNext("y")) {
-                        log.serviceID = serviceID;
-                        gettingInput = false;
-                        in.nextLine();
-                    } else if (in.hasNext("N") || in.hasNext("n")) {
-                        Utilities.clearConsole();
-                        in.nextLine();
-                    }
-                } else {
-                    Utilities.clearConsole();
-                    System.out.println("Service code " + serviceID + " not found in directory.");
-                    serviceID = 0;  //set serviceID back to 0 when we loop through again
-                }
-            }   //Finished getting service code
-
-            //get comments on the service from user, up to 100 chars.
-            return true;
+            //check if date is in the future
+            if (theDate.after(new Date())) {
+                System.out.println("Date may not be in the future.");
+                theDate = null;
+                continue;
+            }
+            //confirm the date is correct
+            System.out.println("Confirm that the following date is the date this service was provided: " + formatter.format(theDate));
+            if (!Utilities.confirm()) {
+                theDate = null;
+            }
         }
+
+        //get service code
+        boolean gettingInput = true;
+        String input = null;
+        Utilities.clearConsole();
+        while (gettingInput) {
+            do {
+                boolean done = false;
+                while (!done) {
+                    System.out.print("Enter the service code to continue, \"x\" to abort, or \"s\" to search for a service in the provider service directory: ");
+                    if (in.hasNext("x"))
+                        return false;
+                    else if (in.hasNext("s")) {
+                        in.nextLine();
+                        while (!checkProviderDirectory()) {
+                            System.out.print("A service with that name could not be found. Enter \"x\" to go back or any other key to search the directory again: ");
+                            if (in.hasNext("x")) {
+                                in.nextLine();
+                                break;
+                            } else {
+                                in.nextLine();
+                            }
+                        }
+                    } else {
+                        //if(in.hasNext()) {
+                        input = in.nextLine();
+                        done = true;
+                    }
+                }
+
+                // service code ID must be a positive int
+                try {
+                    serviceID = Integer.parseInt(input);
+                } catch (NumberFormatException ex) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. Service codes are positive numerals.");
+                    serviceID = 0;
+                }
+                if (serviceID <= 0) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. Service codes are positive numerals.");
+                    serviceID = 0;
+                }
+            } while (serviceID == 0);
+
+            //check with database interface if service code is valid, if so, the database should print the service info and return true.
+            if (checkProviderDirectory(serviceID)) {
+                System.out.print("\nWas this the service provided? (Y/N): ");
+                while (!in.hasNext("Y") && !in.hasNext("y") && !in.hasNext("N") && !in.hasNext("n")) {
+                    in.nextLine();
+                    System.out.print("\nPlease enter Y or N for yes or no: ");
+                }
+                if (in.hasNext("Y") || in.hasNext("y")) {
+                    log.serviceID = serviceID;
+                    gettingInput = false;
+                    in.nextLine();
+                } else if (in.hasNext("N") || in.hasNext("n")) {
+                    Utilities.clearConsole();
+                    in.nextLine();
+                }
+            } else {
+                Utilities.clearConsole();
+                System.out.println("Service code " + serviceID + " not found in directory.");
+                serviceID = 0;  //set serviceID back to 0 when we loop through again
+            }
+        }   //Finished getting service code
+
+        // get service comment
+        System.out.print("Enter service comment (up to 100 characters): ");
+        String buffer = in.nextLine();
+        if(buffer.length() > 100){ // cut off extra characters if too long
+            log.comments = buffer.substring(0, 100);
+        } else {
+            log.comments = buffer;
+        }
+
+        // TODO: Save log to database
+
+        return true;
     }
 
     // asks the user for the name of a service and prints the service name, code, and fee if found.
     private boolean checkProviderDirectory() {
+        // TODO: implement this. Currently no compatible DatabaseInterface functions
         return true;
     }
 
     //takes a service code as an argument and prints the service name then returns true if found. Else returns false
     private boolean checkProviderDirectory(int serviceID) {
-        return true;
+        try {
+            ServiceInfoRecord service = database.getServiceInfo(serviceID);
+            if(service == null) return false;
+            System.out.println("Service Name: " + service.name);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // fails when SQL exception is thrown
     }
 
     //generates service report for the past 7 days
     //returns true on success
     private boolean serviceReport() {
+        // TODO: implement this
         return true;
     }
 }
