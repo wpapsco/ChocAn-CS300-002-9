@@ -3,6 +3,9 @@ package com.ICNH.chocan;
 import com.ICNH.chocan.records.ServiceInfoRecord;
 import com.ICNH.chocan.records.ServiceRecord;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,6 +80,11 @@ public class ProviderInterface {
                     }
                     break;
                 case 5:
+                    if(!generateDirectoryReport()){
+                        System.out.println("Unable to generate service directory");
+                    }
+                    break;
+                case 6:
                     return;
                 //should never reach default, if we do, something went wrong
                 default:
@@ -90,7 +98,7 @@ public class ProviderInterface {
         System.out.println("1. Check member status.\n" +
                 "2. Log a service.\n" +
                 "3. Lookup service by name.\n" +
-                "4. Generate service report(last 7 days).\n" +
+                "4. Generate service directory.\n" +
                 "5. Logout.\n" +
                 "Make a selection: ");
     }
@@ -101,6 +109,7 @@ public class ProviderInterface {
         int memberID;
 
         // Loop until user enters reasonable member ID
+        // TODO: allow user to exit (otherwise they get stuck if they don't have a valid ID)
         Utilities.clearConsole();
         do {
             System.out.print("Enter member ID to validate: ");
@@ -302,6 +311,19 @@ public class ProviderInterface {
     //returns true on success
     private boolean serviceReport() {
         // TODO: implement this
+        return true;
+    }
+    // create "a Provider Directory, an alphabetically ordered list of service names and corresponding service codes and fees"
+    // and save to Provider<providerID>Directory.txt> in reports directory
+    private boolean generateDirectoryReport() {
+        // TODO: implement this.  Ask user for email address (theoretically, we'd email them the report), then make report
+        try {
+            BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + ID + "Directory.txt"));
+            fileOut.write("put provider directory info here");
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 }
