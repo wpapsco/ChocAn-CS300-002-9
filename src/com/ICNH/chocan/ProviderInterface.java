@@ -75,16 +75,11 @@ public class ProviderInterface {
                     checkProviderDirectory();
                     break;
                 case 4:
-                    if(!serviceReport()){
-                        System.out.println("Unable to generate service report");
-                    }
-                    break;
-                case 5:
                     if(!generateDirectoryReport()){
                         System.out.println("Unable to generate service directory");
                     }
                     break;
-                case 6:
+                case 5:
                     return;
                 //should never reach default, if we do, something went wrong
                 default:
@@ -307,12 +302,6 @@ public class ProviderInterface {
         return false; // fails when SQL exception is thrown
     }
 
-    //generates service report for the past 7 days
-    //returns true on success
-    private boolean serviceReport() {
-        // TODO: implement this
-        return true;
-    }
     // create "a Provider Directory, an alphabetically ordered list of service names and corresponding service codes and fees"
     // and save to Provider<providerID>Directory.txt> in reports directory
     private boolean generateDirectoryReport() {
