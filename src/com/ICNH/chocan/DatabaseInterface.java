@@ -170,7 +170,7 @@ public class DatabaseInterface {
 
     /**
      * @param id the member id to validate
-     * @return true if the id is valid, false if not
+     * @return 1 if valid, 0 if invalid, and -1 if its not in the database
      * @throws SQLException
      */
     public int validateMember(int id) throws SQLException {
