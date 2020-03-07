@@ -185,6 +185,7 @@ public class ManagerInterface {
             MemberRecord memberInfo = database.getMemberRecord(memberID);
             fileOut.write("Member Name:      " + memberInfo.name + "\nMember Number:    " + memberInfo.ID + "\nAddress:          " +
                     memberInfo.address + "\n\t\t  " + memberInfo.city + ", " + memberInfo.state + " " + memberInfo.zip);
+            // TODO: fileOut.write the services info
             fileOut.close();
         } catch (IOException | SQLException e) {
             System.out.println("Error: Failed to generate report");
