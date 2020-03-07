@@ -3,7 +3,7 @@ package com.ICNH.chocan;//This file defines the com.ICNH.ChocAn.DatabaseInterfac
 
 import com.ICNH.chocan.records.*;
 import com.mysql.cj.protocol.Resultset;
-import javafx.embed.swt.SWTFXUtils;
+// Temporarily removing so project can be compiled: import javafx.embed.swt.SWTFXUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Member;
