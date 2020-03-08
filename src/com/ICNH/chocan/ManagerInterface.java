@@ -47,19 +47,15 @@ public class ManagerInterface {
                 // TODO: still need to catch and process return values
                 case 1:
                     providerReport();
-                    valid = true;
                     break;
                 case 2:
                     memberReport();
-                    valid = true;
                     break;
                 case 3:
                     editProvider();
-                    valid = true;
                     break;
                 case 4:
                     editMember();
-                    valid = true;
                     break;
                 case 5:
                     return;
@@ -82,6 +78,7 @@ public class ManagerInterface {
     }
 
     // Create a provider report and save to Provider<providerID>Report.txt in reports directory
+    // Return 0 for success, -1 for failure/user quits
     public int providerReport() {
         int providerID;
         Scanner in = new Scanner(System.in);
@@ -185,7 +182,7 @@ public class ManagerInterface {
             MemberRecord memberInfo = database.getMemberRecord(memberID);
             fileOut.write("Member Name:      " + memberInfo.name + "\nMember Number:    " + memberInfo.ID + "\nAddress:          " +
                     memberInfo.address + "\n\t\t  " + memberInfo.city + ", " + memberInfo.state + " " + memberInfo.zip);
-            // TODO: fileOut.write the services info
+            // TODO: fileOut.write the services info (date, provider.name, and service.name for each service)
             fileOut.close();
         } catch (IOException | SQLException e) {
             System.out.println("Error: Failed to generate report");
@@ -195,16 +192,92 @@ public class ManagerInterface {
     }
 
     // Add, remove, or update member information
-    private int editMember() {
-        // TODO: implement this
-        System.out.println("Edit member not implemented yet!");
-        return 0;
+    private void editMember() {
+        Scanner in = new Scanner(System.in);
+        int selection = 0;
+        Utilities.clearConsole();
+        System.out.println(
+                "1. Add new member." +
+                "\n2. Update current member." +
+                "\n3. Delete member." +
+                "\n4. Go back." +
+                "\nMake a selection: ");
+
+        // get valid user choice
+        boolean valid = false;
+        do {
+            if(!in.hasNextInt()){
+                System.out.println("Invalid selection.\n");
+                in.next();
+                continue;
+            }
+            selection = in.nextInt();
+            if(selection <= 0 || selection > 4){
+                System.out.println("Invalid selection.\n");
+                in.next();
+            } else {
+                valid = true;
+            }
+        } while(!valid);
+        // enact user choice
+        // TODO: Finish this
+        switch(selection){
+            case(1):
+                // add member
+                return;
+            case(2):
+                // edit member
+                return;
+            case(3):
+                // delete member
+                return;
+            case(4): // fall through
+            default: // fall through
+        }
     }
 
     // Add, remove, or update provider records
-    private int editProvider() {
-        // TODO: implement this
-        System.out.println("Edit provider not implemented yet!");
-        return 0;
+    private void editProvider() {
+        Scanner in = new Scanner(System.in);
+        int selection = 0;
+        Utilities.clearConsole();
+        System.out.println(
+                "1. Add new provider." +
+                        "\n2. Update current provider." +
+                        "\n3. Delete provider." +
+                        "\n4. Go back." +
+                        "\nMake a selection: ");
+
+        // get valid user choice
+        boolean valid = false;
+        do {
+            if(!in.hasNextInt()){
+                System.out.println("Invalid selection.\n");
+                in.next();
+                continue;
+            }
+            selection = in.nextInt();
+            if(selection <= 0 || selection > 4){
+                System.out.println("Invalid selection.\n");
+                in.next();
+            } else {
+                valid = true;
+            }
+        } while(!valid);
+        // enact user choice
+        // TODO: Finish this
+        switch(selection){
+            case(1):
+                // add provider
+                return;
+            case(2):
+                // edit provider
+                return;
+            case(3):
+                // delete provider
+                return;
+            case(4): // fall through
+            default: // fall through
+        }
     }
 }
