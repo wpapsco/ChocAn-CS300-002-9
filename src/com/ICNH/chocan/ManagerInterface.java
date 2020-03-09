@@ -241,6 +241,11 @@ public class ManagerInterface {
     private void addnewMember(){
         Scanner sc = new Scanner(System.in);
         int memberID, memberStatus = -99;
+        String name;
+        String address;
+        String city;
+        String zip;
+        String state;
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
         do {
@@ -280,15 +285,15 @@ public class ManagerInterface {
         //MemberID is valid new ID, continues with new member information.
         do {
             System.out.println("Enter the new member's name: ");
-            String name = sc.next();
+            name = sc.next();
             System.out.println("Enter" + name + "  address: ");
-            String address = sc.next();
+            address = sc.next();
             System.out.println("Enter" + name + "'s  city: ");
-            String city = sc.next();
+            city = sc.next();
             System.out.println("Enter " + name + "'s state: ");
-            String state = sc.next();
+            state = sc.next();
             System.out.println("Enter" + name + "'s zip: ");
-            String zip = sc.next();
+            zip = sc.next();
 
             System.out.println(" You've entered the following information: ");
             System.out.println("Name:" + name);
@@ -299,8 +304,22 @@ public class ManagerInterface {
         }while(Utilities.confirm() != false);
 
        // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
-
-
+        MemberRecord record;
+        record = new MemberRecord(memberID, name, 1, address, city, state, zip);
+        database.insertMember(record);
+        /*
+        try {
+            if(database.validateMember(memberID) == -1){
+                System.out.println("Member ID " + memberID + "is available. ");
+                memberStatus = -1;
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("Error: SQL Exception thrown");
+        }
+        return;
+        */
+         */
        // return new MemberRecord(memberID, name, 1, address, city, state, zip);
     }
 
