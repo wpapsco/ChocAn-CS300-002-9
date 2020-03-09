@@ -183,7 +183,10 @@ public class DatabaseInterface {
     }
 
     public boolean validateProvider(int id) throws SQLException {
-        return getProviderRecord(id) != null;
+        ProviderRecord record = getProviderRecord(id);
+        if(record != null )
+            return true;
+        return false; // If ID doesn't exist
     }
 
     private FullServiceRecord readFullServiceRecord(ResultSet results) throws SQLException {

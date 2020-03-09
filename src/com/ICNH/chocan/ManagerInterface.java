@@ -365,7 +365,8 @@ public class ManagerInterface {
     private void addNewProvider(){
         Scanner sc = new Scanner(System.in);
         int providerID;
-        //int memberStatus = -99;
+        String name, address, city, state, zip;
+        int providerStatus = -99;
 
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
@@ -388,37 +389,55 @@ public class ManagerInterface {
                     providerID = 0;
                 }
             } while (providerID  == 0);
-            //Needs to check if providerID is valid/exists because a new provider needs an ID that doesn't already exist.
-            /*
+
             try {
-                if(database.validateMember(providerID ) == -1){
+                if(database.validateProvider(providerID ) == false){
                     System.out.println("Member ID " + providerID  + "is available. ");
-                    memberStatus = -1;
+                    providerStatus = -1;
                 }
             }
             catch(SQLException ex){
                 System.out.println("Error: SQL Exception thrown");
             }
-            if(memberStatus != -1){
+            if(providerStatus != -1){
                 System.out.println("The member ID you entered is not available. Please try again.");
             }
-        }while(memberStatus != -1); // Will keep looping until valid NEW member ID entered
-
-        //MemberID is valid new ID, continues with new member information.
-        do {
-            System.out.println("Enter the new provider's name: ");
-            name = sc.next();
+             }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
 
 
-            System.out.println(" You've entered the following information: ");
+            //ProviderID is valid new ID, continues with new member information.
+            do {
+                System.out.println("Enter the new provider's name: ");
+                name = sc.next();
+                System.out.println("Enter address: ");
+                address = sc.next();
+                System.out.println("Enter city: ");
+                city = sc.next();
+                System.out.println("Enter state: ");
+                state = sc.next();
+                System.out.println("Enter  zip: ");
+                zip = sc.next();
 
-            //Checks to make sure new info for provider is correct before creating new provider
+                System.out.println(" You've entered the following information: ");
+                System.out.println("Name:" + name);
+                System.out.println("Address:" + address);
+                System.out.println(" City:" +city + "State:"+ state + " Zip:" + zip);
+                System.out.println("Is this information correct?");
+                //Checks to make sure new info member is correct before creating new member
+            }while(Utilities.confirm() != false);
+            //Needs to check if providerID is valid/exists because a new provider needs an ID that doesn't already exist.
 
-            */
-        }while(Utilities.confirm() != false);
-        //ProviderRecord record;
-        //database.insertProvider(record);
-            return;
+        ProviderRecord record;
+        record = new ProviderRecord(providerID, name, address, city, state, zip);
+        try {
+            if( database.insertProvider(record) ==true){
+                System.out.println("Provider created. ");
+            }
+        }
+        catch(SQLException ex){
+            System.out.println("Error: SQL Exception thrown");
+        }
+        return;
 
     }
 }
