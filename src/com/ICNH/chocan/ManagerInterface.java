@@ -224,6 +224,7 @@ public class ManagerInterface {
         switch(selection){
             case(1):
                 // add member
+                addnewMember();
                 return;
             case(2):
                 // edit member
@@ -234,6 +235,61 @@ public class ManagerInterface {
             case(4): // fall through
             default: // fall through
         }
+    }
+
+
+    private void addnewMember(){
+        Scanner sc = new Scanner(System.in);
+        int memberID, memberStatus = -99;
+        // Loop until user enters reasonable member ID
+        Utilities.clearConsole();
+        do {
+            do {
+                System.out.print("Enter member ID to validate: ");
+                String input = sc.nextLine();
+
+                // member ID must be a positive int
+                try {
+                    memberID = Integer.parseInt(input);
+                    if (memberID <= 0) {
+                        Utilities.clearConsole();
+                        System.out.println("Invalid Number. Member ID's are positive numerals.");
+                        memberID = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. Member ID's are positive numerals.");
+                    memberID = 0;
+                }
+            } while (memberID == 0);
+            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
+            try {
+                memberStatus = database.validateMember(memberID);
+                switch (memberStatus) {
+                    case 1: // valid ID
+                       memberStatus =0;
+                    case 0: // suspended ID
+                        memberStatus = 0;
+                    case -1: // ID not found
+                        memberStatus = -1;
+                }
+            }
+             catch(SQLException ex){
+                System.out.println("Error: SQL Exception thrown");
+            }
+            if(memberStatus != -1){
+                System.out.println("The member ID you entered is not available. Please try again.");
+            }
+        }while(memberStatus != -1); // Will keep looping until valid NEW member ID entered
+
+        //MemberID is valid new ID, continues with new member information.
+        System.out.println("Enter the new member's name: ");
+
+
+
+
+
+        //return new MemberRecord(memberID, name, 1, address, city, state, zip);
     }
 
     // Add, remove, or update provider records
