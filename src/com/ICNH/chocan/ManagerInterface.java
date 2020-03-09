@@ -241,11 +241,8 @@ public class ManagerInterface {
     private void addnewMember(){
         Scanner sc = new Scanner(System.in);
         int memberID, memberStatus = -99;
-        String name;
-        String address;
-        String city;
-        String zip;
-        String state;
+        String name, address, city, zip, state;
+
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
         do {
@@ -286,13 +283,13 @@ public class ManagerInterface {
         do {
             System.out.println("Enter the new member's name: ");
             name = sc.next();
-            System.out.println("Enter" + name + "  address: ");
+            System.out.println("Enter address: ");
             address = sc.next();
-            System.out.println("Enter" + name + "'s  city: ");
+            System.out.println("Enter city: ");
             city = sc.next();
-            System.out.println("Enter " + name + "'s state: ");
+            System.out.println("Enter state: ");
             state = sc.next();
-            System.out.println("Enter" + name + "'s zip: ");
+            System.out.println("Enter  zip: ");
             zip = sc.next();
 
             System.out.println(" You've entered the following information: ");
@@ -304,23 +301,19 @@ public class ManagerInterface {
         }while(Utilities.confirm() != false);
 
        // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
-       // MemberRecord record;
-        //record = new MemberRecord(memberID, name, 1, address, city, state, zip);
-        //database.insertMember(record);
-        /*
+        MemberRecord record;
+        record = new MemberRecord(memberID, name, 1, address, city, state, zip);
+
         try {
-            if(database.validateMember(memberID) == -1){
-                System.out.println("Member ID " + memberID + "is available. ");
-                memberStatus = -1;
+            if( database.insertMember(record) ==true){
+                System.out.println("Member created. ");
             }
         }
         catch(SQLException ex){
             System.out.println("Error: SQL Exception thrown");
         }
 
-        */
         return;
-       // return new MemberRecord(memberID, name, 1, address, city, state, zip);git
     }
 
     // Add, remove, or update provider records
@@ -423,7 +416,8 @@ public class ManagerInterface {
 
             */
         }while(Utilities.confirm() != false);
-
+        //ProviderRecord record;
+        //database.insertProvider(record);
             return;
 
     }
