@@ -228,6 +228,7 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit member
+                editmemberInfo();
                 return;
             case(3):
                 // delete member
@@ -316,6 +317,49 @@ public class ManagerInterface {
         return;
     }
 
+    private void editmemberInfo(){
+        Scanner sc = new Scanner(System.in);
+        int memberID, memberStatus = -99;
+        String name, address, city, zip, state;
+
+        // Loop until user enters reasonable member ID and exists in database
+        Utilities.clearConsole();
+        do {
+            do {
+                System.out.print("Enter member ID to validate: ");
+                String input = sc.nextLine();
+
+                // member ID must be a positive int
+                try {
+                    memberID = Integer.parseInt(input);
+                    if (memberID <= 0) {
+                        Utilities.clearConsole();
+                        System.out.println("Invalid Number. Member ID's are positive numerals.");
+                        memberID = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. Member ID's are positive numerals.");
+                    memberID = 0;
+                }
+            } while (memberID == 0);
+            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
+            try {
+                if(database.validateMember(memberID) == -1){
+                    System.out.println("Member ID does not exist. ");
+                    memberStatus = -1;
+                }
+            }
+            catch(SQLException ex){
+                System.out.println("Error: SQL Exception thrown");
+            }
+        }while(memberStatus == -1); // Will continue to have user enter ID until valid member ID is entered
+
+        //Ready to call edit function that hasn't been written yet *********
+
+        //database.editMember();
+    }
+
     // Add, remove, or update provider records
     private void editProvider() {
         Scanner in = new Scanner(System.in);
@@ -353,6 +397,7 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit provider
+                editproviderInfo();
                 return;
             case(3):
                 // delete provider
@@ -380,19 +425,19 @@ public class ManagerInterface {
                     providerID= Integer.parseInt(input);
                     if (providerID <= 0) {
                         Utilities.clearConsole();
-                        System.out.println("Invalid Number. Member ID's are positive numerals.");
+                        System.out.println("Invalid Number. Provider ID's are positive numerals.");
                         providerID = 0;
                     }
                 } catch (NumberFormatException ex) {
                     Utilities.clearConsole();
-                    System.out.println("Invalid Number. Member ID's are positive numerals.");
+                    System.out.println("Invalid Number. Provider ID's are positive numerals.");
                     providerID = 0;
                 }
             } while (providerID  == 0);
 
             try {
                 if(database.validateProvider(providerID ) == false){
-                    System.out.println("Member ID " + providerID  + "is available. ");
+                    System.out.println("Provider ID " + providerID  + "is available. ");
                     providerStatus = -1;
                 }
             }
@@ -400,9 +445,9 @@ public class ManagerInterface {
                 System.out.println("Error: SQL Exception thrown");
             }
             if(providerStatus != -1){
-                System.out.println("The member ID you entered is not available. Please try again.");
+                System.out.println("The provider ID you entered is not available. Please try again.");
             }
-             }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
+        }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
 
 
             //ProviderID is valid new ID, continues with new member information.
@@ -439,5 +484,47 @@ public class ManagerInterface {
         }
         return;
 
+    }
+    private void editproviderInfo(){
+        Scanner sc = new Scanner(System.in);
+        int providerID, providerStatus = -99;
+        //String name, address, city, zip, state;
+
+        // Loop until user enters reasonable member ID and exists in database
+        Utilities.clearConsole();
+        do {
+            do {
+                System.out.print("Enter member ID to validate: ");
+                String input = sc.nextLine();
+
+                // member ID must be a positive int
+                try {
+                    providerID = Integer.parseInt(input);
+                    if (providerID <= 0) {
+                        Utilities.clearConsole();
+                        System.out.println("Invalid Number. Provider ID's are positive numerals.");
+                        providerID = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. Provider ID's are positive numerals.");
+                    providerID = 0;
+                }
+            } while (providerID== 0);
+            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
+            try {
+                if(database.validateProvider(providerID) == false){
+                    System.out.println("Provider ID does not exist. ");
+                    providerStatus = -1;
+                }
+            }
+            catch(SQLException ex){
+                System.out.println("Error: SQL Exception thrown");
+            }
+        }while(providerStatus == -1); // Will continue to have user enter ID until valid provider ID is entered
+
+        //Ready to call edit function that hasn't been written yet *********
+
+        //database.editProvider();
     }
 }
