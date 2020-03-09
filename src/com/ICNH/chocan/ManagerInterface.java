@@ -228,10 +228,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit member
-                editmemberInfo();
+                editmemberInfo(); // Incomplete
                 return;
             case(3):
                 // delete member
+                deleteMember(); // Hasn't been written yet
                 return;
             case(4): // fall through
             default: // fall through
@@ -359,6 +360,9 @@ public class ManagerInterface {
 
         //database.editMember();
     }
+    private void deleteMember(){
+
+    }
 
     // Add, remove, or update provider records
     private void editProvider() {
@@ -397,10 +401,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit provider
-                editproviderInfo();
+                editproviderInfo(); // Incomplete
                 return;
             case(3):
                 // delete provider
+                deleteProvider(); // hasn't been written yet
                 return;
             case(4): // fall through
             default: // fall through
@@ -494,7 +499,7 @@ public class ManagerInterface {
         Utilities.clearConsole();
         do {
             do {
-                System.out.print("Enter member ID to validate: ");
+                System.out.print("Enter provider ID to validate: ");
                 String input = sc.nextLine();
 
                 // member ID must be a positive int
@@ -526,5 +531,9 @@ public class ManagerInterface {
         //Ready to call edit function that hasn't been written yet *********
 
         //database.editProvider();
+    }
+
+    public void deleteProvider(){
+
     }
 }
