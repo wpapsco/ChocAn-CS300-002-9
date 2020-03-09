@@ -264,14 +264,9 @@ public class ManagerInterface {
             } while (memberID == 0);
             //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
             try {
-                memberStatus = database.validateMember(memberID);
-                switch (memberStatus) {
-                    case 1: // valid ID
-                       memberStatus =0;
-                    case 0: // suspended ID
-                        memberStatus = 0;
-                    case -1: // ID not found
-                        memberStatus = -1;
+                if(database.validateMember(memberID) == -1){
+                    System.out.println("Member ID " + memberID + "is available. ");
+                    memberStatus = -1;
                 }
             }
              catch(SQLException ex){
@@ -283,13 +278,30 @@ public class ManagerInterface {
         }while(memberStatus != -1); // Will keep looping until valid NEW member ID entered
 
         //MemberID is valid new ID, continues with new member information.
-        System.out.println("Enter the new member's name: ");
+        do {
+            System.out.println("Enter the new member's name: ");
+            String name = sc.next();
+            System.out.println("Enter" + name + "  address: ");
+            String address = sc.next();
+            System.out.println("Enter" + name + "'s  city: ");
+            String city = sc.next();
+            System.out.println("Enter " + name + "'s state: ");
+            String state = sc.next();
+            System.out.println("Enter" + name + "'s zip: ");
+            String zip = sc.next();
+
+            System.out.println(" You've entered the following information: ");
+            System.out.println("Name:" + name);
+            System.out.println("Address:" + address);
+            System.out.println(" City:" +city + "State:"+ state + " Zip:" + zip);
+            System.out.println("Is this information correct?");
+        //Checks to make sure new info member is correct before creating new member
+        }while(Utilities.confirm() != false);
+
+       // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
 
 
-
-
-
-        //return new MemberRecord(memberID, name, 1, address, city, state, zip);
+       // return new MemberRecord(memberID, name, 1, address, city, state, zip);
     }
 
     // Add, remove, or update provider records
