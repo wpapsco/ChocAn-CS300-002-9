@@ -105,10 +105,12 @@ public class ProviderInterface {
         int memberID;
 
         // Loop until user enters reasonable member ID
-        // TODO: allow user to exit (otherwise they get stuck if they don't have a valid ID)
         Utilities.clearConsole();
         do {
-            System.out.print("Enter member ID to validate: ");
+            System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
+                if(sc.hasNext("x")){
+                    return -1;
+                }
             String input = sc.nextLine();
 
             // member ID must be a positive int
@@ -286,9 +288,29 @@ public class ProviderInterface {
 
     // asks the user for the name of a service and prints the service name, code, and fee if found.
     private boolean checkProviderDirectory() {
-        // TODO: implement this. Currently no compatible DatabaseInterface functions
         // check out DatabaseInterface.getServicesByName
+        Scanner sc = new Scanner(System.in);
+        String service;
         ArrayList<ServiceInfoRecord> records = new ArrayList<>();
+
+        Utilities.clearConsole();
+        System.out.print("Enter the name of the service to search for: ");
+        service = sc.nextLine();
+
+        try {
+            records = database.getServicesByName(service);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if(records.isEmpty()){
+            return false;
+        }
+        int listSize = records.size();
+        ServiceInfoRecord[] matches = records.toArray(new ServiceInfoRecord[listSize]);
+        for(int i = 0; i < listSize; i++) {
+            System.out.println("Service: " + matches[i].name + "\nService code: " + matches[i].id + "\nDescription: " + matches[i].description + "\nFee: " + matches[i].fee + "\n\n");
+        }
         return true;
     }
 
@@ -317,7 +339,7 @@ public class ProviderInterface {
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + ID + "Directory.txt"));
             fileOut.write("Provider: " + ID + "\n\n");
             for(int i = 0; i < listSize; i++) {
-                fileOut.write("Service: " + records[i].name + "\nService ID: " + records[i].id + "\nDescription: " + records[i].description + "\nFee: " + records[i].fee + "\n\n");
+                fileOut.write("Service: " + records[i].name + "\nService code: " + records[i].id + "\nDescription: " + records[i].description + "\nFee: " + records[i].fee + "\n\n");
             }
             fileOut.close();
         } catch (Exception e) {
