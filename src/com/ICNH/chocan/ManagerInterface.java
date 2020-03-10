@@ -228,7 +228,7 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit member
-                editmemberInfo(); // Incomplete
+                editMemberInfo(); // Incomplete
                 return;
             case(3):
                 // delete member
@@ -300,25 +300,23 @@ public class ManagerInterface {
             System.out.println(" City:" +city + "State:"+ state + " Zip:" + zip);
             System.out.println("Is this information correct?");
         //Checks to make sure new info member is correct before creating new member
-        }while(Utilities.confirm() != false);
+        }while(Utilities.confirm());
 
        // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
         MemberRecord record;
         record = new MemberRecord(memberID, name, 1, address, city, state, zip);
 
         try {
-            if( database.insertMember(record) ==true){
+            if(database.insertMember(record)){
                 System.out.println("Member created. ");
             }
         }
-        catch(SQLException ex){
+        catch(SQLException ex) {
             System.out.println("Error: SQL Exception thrown");
         }
-
-        return;
     }
 
-    private void editmemberInfo(){
+    private void editMemberInfo(){
         Scanner sc = new Scanner(System.in);
         int memberID, memberStatus = -99;
         String name, address, city, zip, state;
@@ -358,7 +356,7 @@ public class ManagerInterface {
 
         //Ready to call edit function that hasn't been written yet *********
 
-        //database.editMember();
+        //database.editMember(memberID);
     }
     private void deleteMember(){
 
@@ -425,7 +423,7 @@ public class ManagerInterface {
                 System.out.print("Enter member ID to validate: ");
                 String input = sc.nextLine();
 
-                // member ID must be a positive int
+                // provider ID must be a positive int
                 try {
                     providerID= Integer.parseInt(input);
                     if (providerID <= 0) {
