@@ -15,8 +15,8 @@ import java.util.Calendar;
 
 public class DatabaseInterface {
     private final String username = "admin";
-    private final String password = "password123"; //so secure
-    private final String dburl = "jdbc:mysql://chocandb.c3jj5hlkz8gr.us-west-2.rds.amazonaws.com/mydb";
+    private final String password = Secrets.password;
+    private final String dburl = Secrets.url;
     private Connection connection;
 
     public DatabaseInterface() {
@@ -183,10 +183,7 @@ public class DatabaseInterface {
     }
 
     public boolean validateProvider(int id) throws SQLException {
-        ProviderRecord record = getProviderRecord(id);
-        if(record != null )
-            return true;
-        return false; // If ID doesn't exist
+        return getProviderRecord(id) != null;
     }
 
     private FullServiceRecord readFullServiceRecord(ResultSet results) throws SQLException {
@@ -295,5 +292,12 @@ public class DatabaseInterface {
         statement.setString(4, record.state);
         statement.setString(5, record.zip);
         return statement.execute();
+    }
+
+    public int getLastInsert() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT LAST_INSERT_ID()");
+        ResultSet results = statement.executeQuery();
+        results.next();
+        return results.getInt(1);
     }
 }
