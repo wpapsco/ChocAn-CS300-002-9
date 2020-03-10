@@ -249,67 +249,67 @@ public class ManagerInterface {
 
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
-        do {
-            do {
-                System.out.print("Enter member ID to validate: ");
-                String input = sc.nextLine();
-
-                // member ID must be a positive int
-                try {
-                    memberID = Integer.parseInt(input);
-                    if (memberID <= 0) {
-                        Utilities.clearConsole();
-                        System.out.println("Invalid Number. Member ID's are positive numerals.");
-                        memberID = 0;
-                    }
-                } catch (NumberFormatException ex) {
-                    Utilities.clearConsole();
-                    System.out.println("Invalid Number. Member ID's are positive numerals.");
-                    memberID = 0;
-                }
-            } while (memberID == 0);
-            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
-            try {
-                if(database.validateMember(memberID) == -1){
-                    System.out.println("Member ID " + memberID + "is available. ");
-                    memberStatus = -1;
-                }
-            }
-             catch(SQLException ex){
-                System.out.println("Error: SQL Exception thrown");
-            }
-            if(memberStatus != -1){
-                System.out.println("The member ID you entered is not available. Please try again.");
-            }
-        }while(memberStatus != -1); // Will keep looping until valid NEW member ID entered
+//        do {
+//            do {
+//                System.out.print("Enter member ID to validate: ");
+//                String input = sc.nextLine();
+//
+//                // member ID must be a positive int
+//                try {
+//                    memberID = Integer.parseInt(input);
+//                    if (memberID <= 0) {
+//                        Utilities.clearConsole();
+//                        System.out.println("Invalid Number. Member ID's are positive numerals.");
+//                        memberID = 0;
+//                    }
+//                } catch (NumberFormatException ex) {
+//                    Utilities.clearConsole();
+//                    System.out.println("Invalid Number. Member ID's are positive numerals.");
+//                    memberID = 0;
+//                }
+//            } while (memberID == 0);
+//            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
+//            try {
+//                if(database.validateMember(memberID) == -1){
+//                    System.out.println("Member ID " + memberID + "is available. ");
+//                    memberStatus = -1;
+//                }
+//            }
+//             catch(SQLException ex){
+//                System.out.println("Error: SQL Exception thrown");
+//            }
+//            if(memberStatus != -1){
+//                System.out.println("The member ID you entered is not available. Please try again.");
+//            }
+//        }while(memberStatus != -1); // Will keep looping until valid NEW member ID entered
 
         //MemberID is valid new ID, continues with new member information.
         do {
             System.out.println("Enter the new member's name: ");
-            name = sc.next();
+            name = sc.nextLine();
             System.out.println("Enter address: ");
-            address = sc.next();
+            address = sc.nextLine();
             System.out.println("Enter city: ");
-            city = sc.next();
+            city = sc.nextLine();
             System.out.println("Enter state: ");
-            state = sc.next();
+            state = sc.nextLine();
             System.out.println("Enter  zip: ");
-            zip = sc.next();
+            zip = sc.nextLine();
 
             System.out.println(" You've entered the following information: ");
             System.out.println("Name:" + name);
             System.out.println("Address:" + address);
-            System.out.println(" City:" +city + "State:"+ state + " Zip:" + zip);
+            System.out.println(" City: " +city + ", State: "+ state + ", Zip: " + zip);
             System.out.println("Is this information correct?");
         //Checks to make sure new info member is correct before creating new member
-        }while(Utilities.confirm());
+        }while(!Utilities.confirm());
 
        // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
-        MemberRecord record = new MemberRecord(memberID, name, true, address, city, state, zip);
+        MemberRecord record = new MemberRecord(0, name, true, address, city, state, zip);
 
         try {
-            database.insertMember(record);
-            System.out.println("Member created. ");
+            int memberId = database.insertMember(record);
+            System.out.println("Member (id " + memberId + ") created. ");
         }
         catch(SQLException ex) {
             System.out.println("Error: SQL Exception thrown");
@@ -417,78 +417,75 @@ public class ManagerInterface {
         int providerStatus = -99;
 
         // Loop until user enters reasonable provider ID
-        Utilities.clearConsole();
-        do {
-            do {
-                System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
-                if(sc.hasNext("x")){
-                    return;
-                }
-                String input = sc.nextLine();
-
-                // provider ID must be a positive int
-                try {
-                    providerID= Integer.parseInt(input);
-                    if (providerID <= 0) {
-                        Utilities.clearConsole();
-                        System.out.println("Invalid Number. Provider ID's are positive numerals.");
-                        providerID = 0;
-                    }
-                } catch (NumberFormatException ex) {
-                    Utilities.clearConsole();
-                    System.out.println("Invalid Number. Provider ID's are positive numerals.");
-                    providerID = 0;
-                }
-            } while (providerID  == 0);
-
-            try {
-                if(database.validateProvider(providerID)){
-                    System.out.println("Provider ID " + providerID  + "is available. ");
-                    providerStatus = -1;
-                }
-            }
-            catch(SQLException ex){
-                System.out.println("Error: SQL Exception thrown");
-            }
-            if(providerStatus != -1){
-                System.out.println("The provider ID you entered is not available. Please try again.");
-            }
-        }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
+//        Utilities.clearConsole();
+//        do {
+//            do {
+//                System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
+//                if(sc.hasNext("x")){
+//                    return;
+//                }
+//                String input = sc.nextLine();
+//
+//                // provider ID must be a positive int
+//                try {
+//                    providerID= Integer.parseInt(input);
+//                    if (providerID <= 0) {
+//                        Utilities.clearConsole();
+//                        System.out.println("Invalid Number. Provider ID's are positive numerals.");
+//                        providerID = 0;
+//                    }
+//                } catch (NumberFormatException ex) {
+//                    Utilities.clearConsole();
+//                    System.out.println("Invalid Number. Provider ID's are positive numerals.");
+//                    providerID = 0;
+//                }
+//            } while (providerID  == 0);
+//
+//            try {
+//                if(database.validateProvider(providerID)){
+//                    System.out.println("Provider ID " + providerID  + "is available. ");
+//                    providerStatus = -1;
+//                }
+//            }
+//            catch(SQLException ex){
+//                System.out.println("Error: SQL Exception thrown");
+//            }
+//            if(providerStatus != -1){
+//                System.out.println("The provider ID you entered is not available. Please try again.");
+//            }
+//        }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
 
 
             //ProviderID is valid new ID, continues with new member information.
             do {
                 System.out.println("Enter the new provider's name: ");
-                name = sc.next();
+                name = sc.nextLine();
                 System.out.println("Enter address: ");
-                address = sc.next();
+                address = sc.nextLine();
                 System.out.println("Enter city: ");
-                city = sc.next();
+                city = sc.nextLine();
                 System.out.println("Enter state: ");
-                state = sc.next();
+                state = sc.nextLine();
                 System.out.println("Enter  zip: ");
-                zip = sc.next();
+                zip = sc.nextLine();
 
                 System.out.println(" You've entered the following information: ");
                 System.out.println("Name:" + name);
                 System.out.println("Address:" + address);
-                System.out.println(" City:" +city + "State:"+ state + " Zip:" + zip);
+                System.out.println(" City: " +city + ", State: "+ state + ", Zip: " + zip);
                 System.out.println("Is this information correct?");
                 //Checks to make sure new info member is correct before creating new member
-            }while(Utilities.confirm() != false);
+            }while(!Utilities.confirm());
             //Needs to check if providerID is valid/exists because a new provider needs an ID that doesn't already exist.
 
-        ProviderRecord record;
-        record = new ProviderRecord(providerID, name, address, city, state, zip);
+        ProviderRecord record = new ProviderRecord(0, name, address, city, state, zip);
         try {
-            database.insertProvider(record);
-            System.out.println("Provider created. ");
+            int providerId = database.insertProvider(record);
+            System.out.println("Provider (id " + providerId + ") created. ");
         }
         catch(SQLException ex){
             System.out.println("Error: SQL Exception thrown");
         }
-        return;
-
     }
     private void editproviderInfo(){
         Scanner sc = new Scanner(System.in);
