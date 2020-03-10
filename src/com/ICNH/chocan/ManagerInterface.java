@@ -224,7 +224,7 @@ public class ManagerInterface {
         switch(selection){
             case(1):
                 // add member
-                addnewMember();
+                addNewMember();
                 return;
             case(2):
                 // edit member
@@ -240,7 +240,7 @@ public class ManagerInterface {
     }
 
 
-    private void addnewMember(){
+    private void addNewMember(){
         Scanner sc = new Scanner(System.in);
         int memberID, memberStatus = -99;
         String name, address, city, zip, state;
