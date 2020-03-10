@@ -416,11 +416,14 @@ public class ManagerInterface {
         String name, address, city, state, zip;
         int providerStatus = -99;
 
-        // Loop until user enters reasonable member ID
+        // Loop until user enters reasonable provider ID
         Utilities.clearConsole();
         do {
             do {
-                System.out.print("Enter member ID to validate: ");
+                System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
+                if(sc.hasNext("x")){
+                    return;
+                }
                 String input = sc.nextLine();
 
                 // provider ID must be a positive int
@@ -439,7 +442,7 @@ public class ManagerInterface {
             } while (providerID  == 0);
 
             try {
-                if(database.validateProvider(providerID ) == false){
+                if(database.validateProvider(providerID)){
                     System.out.println("Provider ID " + providerID  + "is available. ");
                     providerStatus = -1;
                 }
