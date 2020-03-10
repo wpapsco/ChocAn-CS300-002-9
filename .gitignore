@@ -1,2 +1,4 @@
 OUT
 .idea/uiDesigner.xml
+.git-rewrite
+src/com/ICNH/chocan/Secrets.java

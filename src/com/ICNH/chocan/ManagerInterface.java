@@ -128,6 +128,7 @@ public class ManagerInterface {
                     ", " + providerInfo.state + " " + providerInfo.zip);
 
             // TODO: fileOut.write services + total number of consultations + total fee for week. Requires new database functionality
+            // check out DatabaseInterface.getServicesByProvider
             fileOut.close();
         } catch (IOException | SQLException e) {
             System.out.println("Error: Failed to generate report");
@@ -183,6 +184,7 @@ public class ManagerInterface {
             fileOut.write("Member Name:      " + memberInfo.name + "\nMember Number:    " + memberInfo.ID + "\nAddress:          " +
                     memberInfo.address + "\n\t\t  " + memberInfo.city + ", " + memberInfo.state + " " + memberInfo.zip);
             // TODO: fileOut.write the services info (date, provider.name, and service.name for each service)
+            // check out DatabaseInterface.getServicesByMember
             fileOut.close();
         } catch (IOException | SQLException e) {
             System.out.println("Error: Failed to generate report");
@@ -303,8 +305,7 @@ public class ManagerInterface {
         }while(Utilities.confirm());
 
        // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
-        MemberRecord record;
-        record = new MemberRecord(memberID, name, 1, address, city, state, zip);
+        MemberRecord record = new MemberRecord(memberID, name, true, address, city, state, zip);
 
         try {
             if(database.insertMember(record)){

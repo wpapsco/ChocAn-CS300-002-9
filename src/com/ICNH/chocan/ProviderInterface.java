@@ -286,6 +286,7 @@ public class ProviderInterface {
     // asks the user for the name of a service and prints the service name, code, and fee if found.
     private boolean checkProviderDirectory() {
         // TODO: implement this. Currently no compatible DatabaseInterface functions
+        // check out DatabaseInterface.getServicesByName
         return true;
     }
 

@@ -9,7 +9,7 @@ public class MemberRecord {
     public String state;
     public String zip;
 
-    public MemberRecord(int memberID, String name, int i, String address, String city, String state, String zip) {
+    public MemberRecord() {
     }
 
     public MemberRecord(int ID, String name, boolean valid, String address, String city, String state, String zip) {
