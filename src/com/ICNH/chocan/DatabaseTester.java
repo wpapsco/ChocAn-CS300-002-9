@@ -28,10 +28,7 @@ public class DatabaseTester {
         record.state = "or";
         record.valid = true;
         record.zip = "90210";
-        dbinter.insertMember(record);
-
-        int id = dbinter.getLastInsert();
-        MemberRecord record2 = dbinter.getMemberRecord(id);
-        System.out.println(record2.address);
+        int id = dbinter.insertMember(record);
+        System.out.println(id);
     }
 }

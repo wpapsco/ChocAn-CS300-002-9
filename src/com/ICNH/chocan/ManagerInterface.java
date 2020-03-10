@@ -308,9 +308,8 @@ public class ManagerInterface {
         MemberRecord record = new MemberRecord(memberID, name, true, address, city, state, zip);
 
         try {
-            if(database.insertMember(record)){
-                System.out.println("Member created. ");
-            }
+            database.insertMember(record);
+            System.out.println("Member created. ");
         }
         catch(SQLException ex) {
             System.out.println("Error: SQL Exception thrown");
@@ -482,9 +481,8 @@ public class ManagerInterface {
         ProviderRecord record;
         record = new ProviderRecord(providerID, name, address, city, state, zip);
         try {
-            if( database.insertProvider(record) ==true){
-                System.out.println("Provider created. ");
-            }
+            database.insertProvider(record);
+            System.out.println("Provider created. ");
         }
         catch(SQLException ex){
             System.out.println("Error: SQL Exception thrown");

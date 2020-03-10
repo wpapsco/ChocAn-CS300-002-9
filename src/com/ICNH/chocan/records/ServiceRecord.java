@@ -19,6 +19,7 @@ public class ServiceRecord {
         currentDate = new Date();
         this.serviceID = serviceID;
         this.memberID = memberID;
+        this.providerID = providerID;
         this.comments = comments;
         this.serviceDate = serviceDate;
     }

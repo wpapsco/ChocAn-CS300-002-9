@@ -2,14 +2,7 @@ package com.ICNH.chocan;//This file defines the com.ICNH.ChocAn.DatabaseInterfac
 //data repository
 
 import com.ICNH.chocan.records.*;
-import com.mysql.cj.protocol.Resultset;
-// Temporarily removing so project can be compiled: import javafx.embed.swt.SWTFXUtils;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Member;
-import java.security.Provider;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -197,7 +190,6 @@ public class DatabaseInterface {
         return record;
     }
 
-    //TODO: modify to add past 7 days feature depending on what's going on
     private ArrayList<FullServiceRecord> getServices(int id, boolean provider) throws SQLException {
         ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>(); //TODO
         PreparedStatement statement = connection.prepareStatement(
@@ -205,8 +197,15 @@ public class DatabaseInterface {
                         "INNER JOIN ServiceInfo ON Services.service_info = ServiceInfo.id) " +
                         "INNER JOIN Providers ON Services.provider = Providers.id) " +
                         "INNER JOIN Members ON Services.member = Members.id) " +
-                        "WHERE Services." + (provider ? "provider" : "member") + " = ?;");
+                        "WHERE Services." + (provider ? "provider" : "member") + " = ?" +
+                        "AND (Services.service_date BETWEEN ? AND ?);");
+
         statement.setInt(1, id);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new java.util.Date());
+        statement.setDate(3, new Date(cal.getTimeInMillis()));
+        cal.add(Calendar.DATE, -7);
+        statement.setDate(2, new Date(cal.getTimeInMillis()));
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             records.add(readFullServiceRecord(results));
@@ -216,7 +215,7 @@ public class DatabaseInterface {
 
     /**
      * @param id the id of the provider
-     * @return the list of services provided by the provider
+     * @return the list of services provided by the provider in the past 7 days (based on service date)
      * @throws SQLException
      */
     public ArrayList<FullServiceRecord> getServicesByProvider(int id) throws SQLException {
@@ -225,7 +224,7 @@ public class DatabaseInterface {
 
     /**
      * @param id the id of the member
-     * @return the list of services received by the member
+     * @return the list of services received by the member in the past 7 dayz (based on service date)
      * @throws SQLException
      */
     public ArrayList<FullServiceRecord> getServicesByMember(int id) throws SQLException {
@@ -248,11 +247,11 @@ public class DatabaseInterface {
     }
 
     /**
-     * @param record the service record to insert into the database
-     * @return true if successful, false if unsuccessful
+     * @param record the service record to insert into the database. Generates its own id
+     * @return the id of the newly inserted service
      * @throws SQLException
      */
-    public boolean insertService(ServiceRecord record) throws SQLException {
+    public int insertService(ServiceRecord record) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO Services VALUES (?, ?, ?, ?, ?, ?);");
         statement.setInt(1, record.providerID);
         statement.setInt(2, record.memberID);
@@ -260,15 +259,16 @@ public class DatabaseInterface {
         statement.setString(4, record.comments);
         statement.setObject(5, new Timestamp(record.currentDate.getTime()));
         statement.setDate(6, new Date(record.serviceDate.getTime()));
-        return statement.execute();
+        statement.execute();
+        return getLastInsert();
     }
 
     /**
-     * @param record the member record to insert into the database
-     * @return true if successful, false if unsuccessful
+     * @param record the member record to insert into the database. Generates its own id
+     * @return the id of the newly inserted member
      * @throws SQLException
      */
-    public boolean insertMember(MemberRecord record) throws SQLException {
+    public int insertMember(MemberRecord record) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO Members (name, address, city, state, zip, is_valid) VALUES (?, ?, ?, ?, ?, ?);");
         statement.setString(1, record.name);
         statement.setString(2, record.address);
@@ -276,25 +276,27 @@ public class DatabaseInterface {
         statement.setString(4, record.state);
         statement.setString(5, record.zip);
         statement.setInt(6, record.valid ? 1 : 0);
-        return statement.execute();
+        statement.execute();
+        return getLastInsert();
     }
 
     /**
-     * @param record the provider record to insert into the database
-     * @return true if successful, false if unsuccessful
+     * @param record the provider record to insert into the database. Generates its own id
+     * @return the id of the newly inserted provider
      * @throws SQLException
      */
-    public boolean insertProvider(ProviderRecord record) throws SQLException {
+    public int insertProvider(ProviderRecord record) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO Providers (name, address, city, state, zip) VALUES (?, ?, ?, ?, ?);");
         statement.setString(1, record.name);
         statement.setString(2, record.address);
         statement.setString(3, record.city);
         statement.setString(4, record.state);
         statement.setString(5, record.zip);
-        return statement.execute();
+        statement.execute();
+        return getLastInsert();
     }
 
-    public int getLastInsert() throws SQLException {
+    private int getLastInsert() throws SQLException {
         PreparedStatement statement = connection.prepareStatement("SELECT LAST_INSERT_ID()");
         ResultSet results = statement.executeQuery();
         results.next();
