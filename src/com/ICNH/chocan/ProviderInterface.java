@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.regex.PatternSyntaxException;
 
 // Assumptions: - 0 is an invalid member ID
@@ -287,6 +288,7 @@ public class ProviderInterface {
     private boolean checkProviderDirectory() {
         // TODO: implement this. Currently no compatible DatabaseInterface functions
         // check out DatabaseInterface.getServicesByName
+        ArrayList<ServiceInfoRecord> records = new ArrayList<>();
         return true;
     }
 
@@ -306,13 +308,19 @@ public class ProviderInterface {
     // create "a Provider Directory, an alphabetically ordered list of service names and corresponding service codes and fees"
     // and save to Provider<providerID>Directory.txt> in reports directory
     private boolean generateDirectoryReport() {
-        // TODO: implement this.  Ask user for email address (theoretically, we'd email them the report), then make report
+        // TODO: Maybe? Ask user for email address (theoretically, we'd email them the report) before making report
         // check out DatabaseInterface.getServiceInfos
         try {
+            ArrayList<ServiceInfoRecord> recordList = database.getServiceInfos();
+            int listSize = recordList.size();
+            ServiceInfoRecord[] records = recordList.toArray(new ServiceInfoRecord[listSize]);
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + ID + "Directory.txt"));
-            fileOut.write("put provider directory info here");
+            fileOut.write("Provider: " + ID + "\n\n");
+            for(int i = 0; i < listSize; i++) {
+                fileOut.write("Service: " + records[i].name + "\nService ID: " + records[i].id + "\nDescription: " + records[i].description + "\nFee: " + records[i].fee + "\n\n");
+            }
             fileOut.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;

@@ -492,7 +492,7 @@ public class ManagerInterface {
         int providerID, providerStatus = -99;
         //String name, address, city, zip, state;
 
-        // Loop until user enters reasonable member ID and exists in database
+        // Loop until user enters reasonable ID and exists in database
         Utilities.clearConsole();
         do {
             do {
