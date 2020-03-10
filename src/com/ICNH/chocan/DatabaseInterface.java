@@ -43,7 +43,7 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     public ArrayList<ServiceInfoRecord> getServiceInfos() throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM ServiceInfo;");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM ServiceInfo ORDER BY name ASC;");
         ResultSet results = statement.executeQuery();
         ArrayList<ServiceInfoRecord> records = new ArrayList<>();
         while (results.next()) {
@@ -175,6 +175,11 @@ public class DatabaseInterface {
         return -1;
     }
 
+    /**
+     * @param id the id of the provider to validate
+     * @return true if the provider exists in the database, false if it doesn't
+     * @throws SQLException
+     */
     public boolean validateProvider(int id) throws SQLException {
         return getProviderRecord(id) != null;
     }
@@ -191,7 +196,7 @@ public class DatabaseInterface {
     }
 
     private ArrayList<FullServiceRecord> getServices(int id, boolean provider) throws SQLException {
-        ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>(); //TODO
+        ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>();
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT * FROM (((Services " +
                         "INNER JOIN ServiceInfo ON Services.service_info = ServiceInfo.id) " +

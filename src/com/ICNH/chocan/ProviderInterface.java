@@ -307,6 +307,7 @@ public class ProviderInterface {
     // and save to Provider<providerID>Directory.txt> in reports directory
     private boolean generateDirectoryReport() {
         // TODO: implement this.  Ask user for email address (theoretically, we'd email them the report), then make report
+        // check out DatabaseInterface.getServiceInfos
         try {
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + ID + "Directory.txt"));
             fileOut.write("put provider directory info here");
