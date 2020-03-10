@@ -2,6 +2,7 @@ package com.ICNH.chocan;
 
 import com.ICNH.chocan.records.ServiceInfoRecord;
 import com.ICNH.chocan.records.ServiceRecord;
+import com.mysql.cj.result.SqlDateValueFactory;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -281,7 +282,11 @@ public class ProviderInterface {
             log.comments = buffer;
         }
 
-        // TODO: Save log to database
+        try{
+            database.insertService(log);
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
 
         return true;
     }
