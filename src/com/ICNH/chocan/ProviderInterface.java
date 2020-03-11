@@ -350,6 +350,7 @@ public class ProviderInterface {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Utilities.clearConsole();
         return true;
     }
 }

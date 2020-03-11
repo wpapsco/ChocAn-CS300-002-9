@@ -81,14 +81,14 @@ public class ManagerInterface {
 
     // Create a provider report and save to Provider<providerID>Report.txt in reports directory
     //report contains all services provided by the provider in the last 7 days
-    // Return 0 for success, -1 for failure/user quits
-    public int providerReport() {
+    // TODO Figure out why fileOut.write isn't working here
+    public void providerReport() {
         int providerID = getValidProvider();
         ProviderRecord provider = new ProviderRecord();
 
         //if user cancelled
         if(providerID == -1)
-            return -1;
+            return;
         try {
             provider = database.getProviderRecord(providerID);
         } catch(SQLException e){
@@ -100,8 +100,7 @@ public class ManagerInterface {
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + providerID + "Report.txt"));
             fileOut.write("Provider Name: " + provider.name + "\nProvider Number: " + provider.ID + "\nAddress: " +
                     provider.address + ", " + provider.city + " " + provider.state + ", " + provider.zip);
-            ArrayList<FullServiceRecord> services = new ArrayList<>();
-            services = database.getServicesByProvider(providerID);
+            ArrayList<FullServiceRecord> services = database.getServicesByProvider(providerID);
             int listSize = services.size();
             FullServiceRecord[] records = services.toArray(new FullServiceRecord[listSize]);
             for(int i = 0; i < listSize; i++) {
@@ -110,21 +109,19 @@ public class ManagerInterface {
             }
             fileOut.close();
         } catch (Exception e) {
-            System.out.println("Error: Failed to generate report");
-            return -1;
+            e.printStackTrace();
         }
-        return 0;
     }
 
     // Create a member report and save to Member<memberID>Report.txt in reports directory
-    // Return 0 for success, -1 for failure/user quits
-    private int memberReport() {
+    // TODO Figure out why fileOut.write isn't working here
+    private void memberReport() {
         int memberID = getValidMember();
         MemberRecord memberInfo = new MemberRecord();
 
         //if user cancelled
         if(memberID == -1)
-            return -1;
+            return;
         try {
             memberInfo = database.getMemberRecord(memberID);
         } catch(SQLException e){
@@ -146,10 +143,9 @@ public class ManagerInterface {
             }
             fileOut.close();
         } catch (Exception e) {
-            System.out.println("Error: Failed to generate report");
-            return -1;
+            e.printStackTrace();
         }
-        return 0;
+        return;
     }
 
     // Add, remove, or update member information
@@ -193,7 +189,7 @@ public class ManagerInterface {
                 return;
             case(3):
                 // delete member
-                deleteMember(); // Hasn't been written yet
+                deleteMember(); // Incomplete
                 return;
             case(4): // fall through
             default: // fall through
