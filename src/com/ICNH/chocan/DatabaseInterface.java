@@ -308,4 +308,9 @@ public class DatabaseInterface {
         results.next();
         return results.getInt(1);
     }
+    // TODO Add a function that replaces a member record in the database with a new one supplied as a parameter "MemberRecord"
+    // The goal is to change the fields of the member's info in the software and pass the changes to the DB. So ID should remain the same.
+    // TODO Add a similar function for a provider record in the database, the goal is the same.
+
+    // TODO add a function that removes a provider or member from the database, as well as any services provided to/by them.
 }
