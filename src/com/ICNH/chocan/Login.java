@@ -1,5 +1,6 @@
 package com.ICNH.chocan;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -64,8 +65,18 @@ public class Login {
             ID = loginID.nextInt();
             //check for ID in database here
             //placeholder check, always true
-            if (ID == ID)
-                found = true;
+            try {
+                if (database.validateProvider(ID))
+                    found = true;
+                else {
+                    System.out.println("Invalid ID. Press enter to continue.");
+                    loginID.nextLine();
+                    loginID.nextLine();
+                    return;
+                }
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
         } while (!found);
 
         //open provider interface here

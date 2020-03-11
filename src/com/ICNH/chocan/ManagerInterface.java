@@ -113,7 +113,6 @@ public class ManagerInterface {
     }
 
     // Create a member report and save to Member<memberID>Report.txt in reports directory
-    // TODO Figure out why fileOut.write isn't working here
     private void memberReport() {
         int memberID = getValidMember();
         MemberRecord memberInfo = new MemberRecord();
