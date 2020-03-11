@@ -293,13 +293,13 @@ public class ManagerInterface {
             city = sc.nextLine();
             System.out.println("Enter state: ");
             state = sc.nextLine();
-            System.out.println("Enter  zip: ");
+            System.out.println("Enter zip: ");
             zip = sc.nextLine();
 
             System.out.println(" You've entered the following information: ");
-            System.out.println("Name:" + name);
-            System.out.println("Address:" + address);
-            System.out.println(" City: " +city + ", State: "+ state + ", Zip: " + zip);
+            System.out.println("Name: " + name);
+            System.out.println("Address: " + address);
+            System.out.println("City: " +city + ", State: "+ state + ", Zip: " + zip);
             System.out.println("Is this information correct?");
         //Checks to make sure new info member is correct before creating new member
         }while(!Utilities.confirm());
@@ -318,48 +318,45 @@ public class ManagerInterface {
 
     private void editMemberInfo(){
         Scanner sc = new Scanner(System.in);
-        int memberID, memberStatus = -99;
-        String name, address, city, zip, state;
+        int memberID = getValidMember();
+        //String name, address, city, zip, state;
 
-        // Loop until user enters reasonable member ID and exists in database
-        Utilities.clearConsole();
-        do {
-            do {
-                System.out.print("Enter member ID to validate: ");
-                String input = sc.nextLine();
-
-                // member ID must be a positive int
-                try {
-                    memberID = Integer.parseInt(input);
-                    if (memberID <= 0) {
-                        Utilities.clearConsole();
-                        System.out.println("Invalid Number. Member ID's are positive numerals.");
-                        memberID = 0;
-                    }
-                } catch (NumberFormatException ex) {
-                    Utilities.clearConsole();
-                    System.out.println("Invalid Number. Member ID's are positive numerals.");
-                    memberID = 0;
-                }
-            } while (memberID == 0);
-            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
-            try {
-                if(database.validateMember(memberID) == -1){
-                    System.out.println("Member ID does not exist. ");
-                    memberStatus = -1;
-                }
-            }
-            catch(SQLException ex){
-                System.out.println("Error: SQL Exception thrown");
-            }
-        }while(memberStatus == -1); // Will continue to have user enter ID until valid member ID is entered
 
         //Ready to call edit function that hasn't been written yet *********
 
         //database.editMember(memberID);
     }
-    private void deleteMember(){
 
+    private void deleteMember(){
+        Scanner sc = new Scanner(System.in);
+        int memberID;
+        MemberRecord toDelete = new MemberRecord();
+        System.out.println("WARNING! Deleting a member will remove all services logged to the member from the system. Ensure all bills are paid before removal.");
+        System.out.println("Press enter to continue.");
+        sc.nextLine();
+
+        memberID = getValidMember();
+        if(memberID == -1)
+            return;
+        try {
+            toDelete = database.getMemberRecord(memberID);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        Utilities.clearConsole();
+        System.out.println("Name: " + toDelete.name + "\nAddress: " + toDelete.address + ", " + toDelete.city + " " + toDelete.state + " " + toDelete.zip + "\nMember ID: " + toDelete.ID);
+        System.out.println("Delete this member?");
+        if(Utilities.confirm()){
+            // TODO call database remove method for member. Method should also remove any services that link to the member.
+            //database.removeMember(memberID);
+            System.out.println("Member removed.");
+        }
+        else {
+            System.out.println("Aborted");
+        }
+        System.out.println("Press enter to continue.");
+        sc.nextLine();
     }
 
     // Add, remove, or update provider records
@@ -466,7 +463,7 @@ public class ManagerInterface {
                 city = sc.nextLine();
                 System.out.println("Enter state: ");
                 state = sc.nextLine();
-                System.out.println("Enter  zip: ");
+                System.out.println("Enter zip: ");
                 zip = sc.nextLine();
 
                 System.out.println(" You've entered the following information: ");
@@ -476,7 +473,6 @@ public class ManagerInterface {
                 System.out.println("Is this information correct?");
                 //Checks to make sure new info member is correct before creating new member
             }while(!Utilities.confirm());
-            //Needs to check if providerID is valid/exists because a new provider needs an ID that doesn't already exist.
 
         ProviderRecord record = new ProviderRecord(0, name, address, city, state, zip);
         try {
@@ -488,13 +484,79 @@ public class ManagerInterface {
             ex.printStackTrace();
         }
     }
+    // TODO
     private void editproviderInfo(){
         Scanner sc = new Scanner(System.in);
         int providerID = getValidProvider();
-        //String name, address, city, zip, state;
-        //Ready to call edit function that hasn't been written yet *********
+        ProviderRecord toChange = new ProviderRecord();
 
-        //database.editProvider(providerID);
+        //user chose to return from getValidProvider
+        if(providerID == -1)
+            return;
+
+        Utilities.clearConsole();
+        System.out.println("Name: " + toChange.name + "\nAddress: " + toChange.address + ", " + toChange.city + " " + toChange.state + " " + toChange.zip + "\nProvider ID: " + toChange.ID);
+        System.out.println("Edit this provider?");
+        if(Utilities.confirm()) {
+            do {
+                int selection = 0;
+                Utilities.clearConsole();
+                System.out.println(
+                        "Which field would you like to change? " +
+                                "\n1. Name" +
+                                "\n2. Address" +
+                                "\n3. City" +
+                                "\n4. State" +
+                                "\n5. Go back" +
+                                "\nMake a selection: ");
+
+                // get valid user choice
+                boolean valid = false;
+                do {
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid selection.\n");
+                        sc.next();
+                        continue;
+                    }
+                    selection = sc.nextInt();
+                    if (selection <= 0 || selection > 5) {
+                        System.out.println("Invalid selection.\n");
+                        sc.next();
+                    } else {
+                        valid = true;
+                    }
+                } while (!valid);
+                // enact user choice
+                // TODO: Finish this
+                switch (selection) {
+                    case (1):
+                        // change name
+                        String newName;
+                        do {
+                            System.out.println("Enter the new name, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            newName = sc.nextLine();
+                            System.out.println("Change " + toChange.name + " to " + newName + "?");
+                        } while(Utilities.confirm());
+                        break;
+                    case (2):
+                        // change address
+                        break;
+                    case (3):
+                        // change city
+                        break;
+                    case (4): // change state
+                        break;
+                    case (5): // go back
+                        return;
+                    default: // fall through
+                }
+                System.out.println("Change another field?");
+            } while (Utilities.confirm());
+        }
+        //Ready to call replace function that hasn't been written yet *********
+        //database.replaceProvider(providerID);
     }
 
     private void deleteProvider(){
@@ -556,7 +618,7 @@ public class ManagerInterface {
                     providerID = 0;
                 }
             } while (providerID == 0);
-            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
+
             try {
                 if(database.validateProvider(providerID)){
                     providerStatus = 0;
@@ -572,5 +634,49 @@ public class ManagerInterface {
         }while(providerStatus == -1); // Will continue to have user enter ID until valid provider ID is entered
 
         return providerID;
+    }
+    //gets valid provider ID from the user and returns the ID, or returns -1 if user cancels.
+    private int getValidMember(){
+        Scanner sc = new Scanner(System.in);
+        int memberID, memberStatus = -1;
+
+        Utilities.clearConsole();
+        do {
+            do {
+                System.out.print("Enter member ID, or enter 'x' to return: ");
+                if(sc.hasNext("x"))
+                    return -1;
+                String input = sc.nextLine();
+
+                // member ID must be a positive int
+                try {
+                    memberID = Integer.parseInt(input);
+                    if (memberID <= 0) {
+                        Utilities.clearConsole();
+                        System.out.println("Invalid Number. member ID's are positive numerals.");
+                        memberID = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    Utilities.clearConsole();
+                    System.out.println("Invalid Number. member ID's are positive numerals.");
+                    memberID = 0;
+                }
+            } while (memberID == 0);
+
+            try {
+                if(database.validateMember(memberID) != -1){
+                    memberStatus = 0;
+                }
+                else {
+                    Utilities.clearConsole();
+                    System.out.println("Member ID not recognized.");
+                }
+            }
+            catch(SQLException ex){
+                ex.printStackTrace();
+            }
+        }while(memberStatus == -1); // Will continue to have user enter ID until valid provider ID is entered
+
+        return memberID;
     }
 }
