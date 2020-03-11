@@ -195,46 +195,10 @@ public class ManagerInterface {
 
     private void addNewMember(){
         Scanner sc = new Scanner(System.in);
-        int memberID, memberStatus = -99;
         String name, address, city, zip, state;
 
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
-//        do {
-//            do {
-//                System.out.print("Enter member ID to validate: ");
-//                String input = sc.nextLine();
-//
-//                // member ID must be a positive int
-//                try {
-//                    memberID = Integer.parseInt(input);
-//                    if (memberID <= 0) {
-//                        Utilities.clearConsole();
-//                        System.out.println("Invalid Number. Member ID's are positive numerals.");
-//                        memberID = 0;
-//                    }
-//                } catch (NumberFormatException ex) {
-//                    Utilities.clearConsole();
-//                    System.out.println("Invalid Number. Member ID's are positive numerals.");
-//                    memberID = 0;
-//                }
-//            } while (memberID == 0);
-//            //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
-//            try {
-//                if(database.validateMember(memberID) == -1){
-//                    System.out.println("Member ID " + memberID + "is available. ");
-//                    memberStatus = -1;
-//                }
-//            }
-//             catch(SQLException ex){
-//                System.out.println("Error: SQL Exception thrown");
-//            }
-//            if(memberStatus != -1){
-//                System.out.println("The member ID you entered is not available. Please try again.");
-//            }
-//        }while(memberStatus != -1); // Will keep looping until valid NEW member ID entered
-
-        //MemberID is valid new ID, continues with new member information.
         do {
             System.out.println("Enter the new member's name: ");
             name = sc.nextLine();
@@ -474,51 +438,9 @@ public class ManagerInterface {
 
     private void addNewProvider(){
         Scanner sc = new Scanner(System.in);
-        int providerID;
         String name, address, city, state, zip;
-        int providerStatus = -99;
 
-        // Loop until user enters reasonable provider ID
-//        Utilities.clearConsole();
-//        do {
-//            do {
-//                System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
-//                if(sc.hasNext("x")){
-//                    return;
-//                }
-//                String input = sc.nextLine();
-//
-//                // provider ID must be a positive int
-//                try {
-//                    providerID= Integer.parseInt(input);
-//                    if (providerID <= 0) {
-//                        Utilities.clearConsole();
-//                        System.out.println("Invalid Number. Provider ID's are positive numerals.");
-//                        providerID = 0;
-//                    }
-//                } catch (NumberFormatException ex) {
-//                    Utilities.clearConsole();
-//                    System.out.println("Invalid Number. Provider ID's are positive numerals.");
-//                    providerID = 0;
-//                }
-//            } while (providerID  == 0);
-//
-//            try {
-//                if(database.validateProvider(providerID)){
-//                    System.out.println("Provider ID " + providerID  + "is available. ");
-//                    providerStatus = -1;
-//                }
-//            }
-//            catch(SQLException ex){
-//                System.out.println("Error: SQL Exception thrown");
-//            }
-//            if(providerStatus != -1){
-//                System.out.println("The provider ID you entered is not available. Please try again.");
-//            }
-//        }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
-
-
-        //ProviderID is valid new ID, continues with new member information.
+        Utilities.clearConsole();
         do {
             System.out.println("Enter the new provider's name: ");
             name = sc.nextLine();
