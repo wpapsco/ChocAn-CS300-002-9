@@ -46,7 +46,6 @@ public class ManagerInterface {
 
             //process user selection
             switch (selection) {
-                // TODO: still need to catch and process return values
                 case 1:
                     providerReport();
                     break;
@@ -175,7 +174,6 @@ public class ManagerInterface {
             }
         } while(!valid);
         // enact user choice
-        // TODO: Finish this
         switch(selection){
             case(1):
                 // add member
@@ -183,11 +181,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit member
-                editMemberInfo(); // Incomplete
+                editMemberInfo(); // Needs database helper func. and testing. otherwise complete
                 return;
             case(3):
                 // delete member
-                deleteMember(); // Incomplete
+                deleteMember(); // Needs database helper func. and testing. otherwise complete
                 return;
             case(4): // fall through
             default: // fall through
@@ -456,7 +454,6 @@ public class ManagerInterface {
             }
         } while(!valid);
         // enact user choice
-        // TODO: Finish this
         switch(selection){
             case(1):
                 // add provider
@@ -464,11 +461,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit provider
-                editProviderInfo(); // Incomplete
+                editProviderInfo(); // Needs database helper func. and testing. otherwise complete
                 return;
             case(3):
                 // delete provider
-                deleteProvider(); // hasn't been written yet
+                deleteProvider(); // Needs database helper func. and testing. otherwise complete
                 return;
             case(4): // fall through
             default: // fall through

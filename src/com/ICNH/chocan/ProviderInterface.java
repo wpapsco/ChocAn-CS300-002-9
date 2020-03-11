@@ -309,6 +309,8 @@ public class ProviderInterface {
         }
 
         if(records.isEmpty()){
+            System.out.println("No results found matching: " + service + ". \nPress enter to return.");
+            sc.nextLine();
             return false;
         }
         int listSize = records.size();
@@ -316,6 +318,8 @@ public class ProviderInterface {
         for(int i = 0; i < listSize; i++) {
             System.out.println("Service: " + matches[i].name + "\nService code: " + matches[i].id + "\nDescription: " + matches[i].description + "\nFee: " + matches[i].fee + "\n\n");
         }
+        System.out.println(listSize + "result(s) found for: " + service + ". \nPress enter to return.");
+        sc.nextLine();
         return true;
     }
 
