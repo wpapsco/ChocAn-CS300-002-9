@@ -319,21 +319,21 @@ public class ManagerInterface {
     //change one or more fields for an existing provider
     private void editMemberInfo(){
         Scanner sc = new Scanner(System.in);
-        int providerID = getValidProvider();
-        ProviderRecord toChange = new ProviderRecord();
+        int memberID = getValidMember();
+        MemberRecord toChange = new MemberRecord();
 
         //user chose to return from getValidProvider
-        if(providerID == -1)
+        if(memberID == -1)
             return;
         try {
-            toChange = database.getProviderRecord(providerID);
+            toChange = database.getMemberRecord(memberID);
         } catch (SQLException e){
             e.printStackTrace();
         }
 
         Utilities.clearConsole();
-        System.out.println("Name: " + toChange.name + "\nAddress: " + toChange.address + ", " + toChange.city + " " + toChange.state + " " + toChange.zip + "\nProvider ID: " + toChange.ID);
-        System.out.println("Edit this provider?");
+        System.out.println("Name: " + toChange.name + "\nAddress: " + toChange.address + ", " + toChange.city + " " + toChange.state + " " + toChange.zip + "\nMember ID: " + toChange.ID);
+        System.out.println("Edit this Member?");
         if(Utilities.confirm()) {
             do {
                 int selection = 0;
@@ -365,6 +365,8 @@ public class ManagerInterface {
                     }
                 } while (!valid);
                 // enact user choice
+
+                sc.nextLine();
                 switch (selection) {
                     case (1):
                         // change name
@@ -373,7 +375,6 @@ public class ManagerInterface {
                             System.out.println("Enter the new name, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newName = sc.nextLine();
                             if(newName.length() > 45){ // cut off extra characters if too long
                                 newName = newName.substring(0, 45);
@@ -389,7 +390,6 @@ public class ManagerInterface {
                             System.out.println("Enter the new street address, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newAddress = sc.nextLine();
                             if(newAddress.length() > 45){ // cut off extra characters if too long
                                 newAddress = newAddress.substring(0, 45);
@@ -405,10 +405,9 @@ public class ManagerInterface {
                             System.out.println("Enter the new city, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newCity = sc.nextLine();
                             if(newCity.length() > 45){ // cut off extra characters if too long
-                                newAddress = newCity.substring(0, 45);
+                                newCity = newCity.substring(0, 45);
                             }
                             System.out.println("Change " + toChange.city+ " to " + newCity + "?");
                         } while(!Utilities.confirm());
@@ -420,10 +419,9 @@ public class ManagerInterface {
                             System.out.println("Enter the new state, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newState = sc.nextLine();
-                            if(newState.length() > 45){ // cut off extra characters if too long
-                                newState= newState.substring(0, 45);
+                            if(newState.length() > 2){ // cut off extra characters if too long
+                                newState= newState.substring(0, 2);
                             }
                             System.out.println("Change " + toChange.state + " to " + newState + "?");
                         } while(!Utilities.confirm());
@@ -651,6 +649,7 @@ public class ManagerInterface {
                     }
                 } while (!valid);
                 // enact user choice
+                sc.nextLine();
                 switch (selection) {
                     case (1):
                         // change name
@@ -659,7 +658,6 @@ public class ManagerInterface {
                             System.out.println("Enter the new name, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newName = sc.nextLine();
                             if(newName.length() > 45){ // cut off extra characters if too long
                                 newName = newName.substring(0, 45);
@@ -675,7 +673,6 @@ public class ManagerInterface {
                             System.out.println("Enter the new street address, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newAddress = sc.nextLine();
                             if(newAddress.length() > 45){ // cut off extra characters if too long
                                 newAddress = newAddress.substring(0, 45);
@@ -691,10 +688,9 @@ public class ManagerInterface {
                             System.out.println("Enter the new city, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newCity = sc.nextLine();
                             if(newCity.length() > 45){ // cut off extra characters if too long
-                                newAddress = newCity.substring(0, 45);
+                                newCity = newCity.substring(0, 45);
                             }
                             System.out.println("Change " + toChange.city+ " to " + newCity + "?");
                         } while(!Utilities.confirm());
@@ -706,10 +702,9 @@ public class ManagerInterface {
                             System.out.println("Enter the new state, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
-                            sc.nextLine();
                             newState = sc.nextLine();
-                            if(newState.length() > 45){ // cut off extra characters if too long
-                                newState= newState.substring(0, 45);
+                            if(newState.length() > 2){ // cut off extra characters if too long
+                                newState= newState.substring(0, 2);
                             }
                             System.out.println("Change " + toChange.state + " to " + newState + "?");
                         } while(!Utilities.confirm());
