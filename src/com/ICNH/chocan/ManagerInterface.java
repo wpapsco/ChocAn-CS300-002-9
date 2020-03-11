@@ -200,10 +200,10 @@ public class ManagerInterface {
         Utilities.clearConsole();
         System.out.println(
                 "1. Add new member." +
-                "\n2. Update current member." +
-                "\n3. Delete member." +
-                "\n4. Go back." +
-                "\nMake a selection: ");
+                        "\n2. Update current member." +
+                        "\n3. Delete member." +
+                        "\n4. Go back." +
+                        "\nMake a selection: ");
 
         // get valid user choice
         boolean valid = false;
@@ -301,10 +301,10 @@ public class ManagerInterface {
             System.out.println("Address: " + address);
             System.out.println("City: " +city + ", State: "+ state + ", Zip: " + zip);
             System.out.println("Is this information correct?");
-        //Checks to make sure new info member is correct before creating new member
+            //Checks to make sure new info member is correct before creating new member
         }while(!Utilities.confirm());
 
-       // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
+        // **** Add new member record unfinished, unsure at the moment of  adding new member correctly. ********
         MemberRecord record = new MemberRecord(0, name, true, address, city, state, zip);
 
         try {
@@ -316,15 +316,132 @@ public class ManagerInterface {
         }
     }
 
+    //change one or more fields for an existing provider
     private void editMemberInfo(){
         Scanner sc = new Scanner(System.in);
-        int memberID = getValidMember();
-        //String name, address, city, zip, state;
+        int providerID = getValidProvider();
+        ProviderRecord toChange = new ProviderRecord();
 
+        //user chose to return from getValidProvider
+        if(providerID == -1)
+            return;
+        try {
+            toChange = database.getProviderRecord(providerID);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
-        //Ready to call edit function that hasn't been written yet *********
+        Utilities.clearConsole();
+        System.out.println("Name: " + toChange.name + "\nAddress: " + toChange.address + ", " + toChange.city + " " + toChange.state + " " + toChange.zip + "\nProvider ID: " + toChange.ID);
+        System.out.println("Edit this provider?");
+        if(Utilities.confirm()) {
+            do {
+                int selection = 0;
+                Utilities.clearConsole();
+                System.out.println(
+                        "Which field would you like to change? " +
+                                "\n1. Name" +
+                                "\n2. Address" +
+                                "\n3. City" +
+                                "\n4. State" +
+                                "\n5. Go back, aborting changes" +
+                                "\n6. Submit changes" +
+                                "\nMake a selection: ");
 
-        //database.editMember(memberID);
+                // get valid user choice
+                boolean valid = false;
+                do {
+                    if (!sc.hasNextInt()) {
+                        System.out.println("Invalid selection.\n");
+                        sc.next();
+                        continue;
+                    }
+                    selection = sc.nextInt();
+                    if (selection <= 0 || selection > 6) {
+                        System.out.println("Invalid selection.\n");
+                        sc.next();
+                    } else {
+                        valid = true;
+                    }
+                } while (!valid);
+                // enact user choice
+                switch (selection) {
+                    case (1):
+                        // change name
+                        String newName;
+                        do {
+                            System.out.println("Enter the new name, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newName = sc.nextLine();
+                            if(newName.length() > 45){ // cut off extra characters if too long
+                                newName = newName.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.name + " to " + newName + "?");
+                        } while(!Utilities.confirm());
+                        toChange.name = newName;
+                        break;
+                    case (2):
+                        // change address
+                        String newAddress;
+                        do {
+                            System.out.println("Enter the new street address, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newAddress = sc.nextLine();
+                            if(newAddress.length() > 45){ // cut off extra characters if too long
+                                newAddress = newAddress.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.address + " to " + newAddress + "?");
+                        } while(!Utilities.confirm());
+                        toChange.address = newAddress;
+                        break;
+                    case (3):
+                        // change city
+                        String newCity;
+                        do {
+                            System.out.println("Enter the new city, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newCity = sc.nextLine();
+                            if(newCity.length() > 45){ // cut off extra characters if too long
+                                newAddress = newCity.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.city+ " to " + newCity + "?");
+                        } while(!Utilities.confirm());
+                        toChange.city = newCity;
+                        break;
+                    case (4): // change state
+                        String newState;
+                        do {
+                            System.out.println("Enter the new state, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newState = sc.nextLine();
+                            if(newState.length() > 45){ // cut off extra characters if too long
+                                newState= newState.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.state + " to " + newState + "?");
+                        } while(!Utilities.confirm());
+                        toChange.state = newState;
+                        break;
+                    case (5): // go back, aborting all changes
+                        return;
+                    case (6): // go back, aborting all changes
+                        //Ready to call replace function that hasn't been written yet *********
+                        //database.replaceProvider(providerID, toChange);
+                        System.out.println("Changes saved! Press enter to continue.");
+                        sc.nextLine();
+                        return;
+                    default: // fall through
+                }
+                System.out.println("Change another field?");
+            } while (true);
+        }
     }
 
     private void deleteMember(){
@@ -396,7 +513,7 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit provider
-                editproviderInfo(); // Incomplete
+                editProviderInfo(); // Incomplete
                 return;
             case(3):
                 // delete provider
@@ -453,26 +570,26 @@ public class ManagerInterface {
 //        }while(providerStatus != -1); // Will keep looping until valid NEW member ID entered
 
 
-            //ProviderID is valid new ID, continues with new member information.
-            do {
-                System.out.println("Enter the new provider's name: ");
-                name = sc.nextLine();
-                System.out.println("Enter address: ");
-                address = sc.nextLine();
-                System.out.println("Enter city: ");
-                city = sc.nextLine();
-                System.out.println("Enter state: ");
-                state = sc.nextLine();
-                System.out.println("Enter zip: ");
-                zip = sc.nextLine();
+        //ProviderID is valid new ID, continues with new member information.
+        do {
+            System.out.println("Enter the new provider's name: ");
+            name = sc.nextLine();
+            System.out.println("Enter address: ");
+            address = sc.nextLine();
+            System.out.println("Enter city: ");
+            city = sc.nextLine();
+            System.out.println("Enter state: ");
+            state = sc.nextLine();
+            System.out.println("Enter zip: ");
+            zip = sc.nextLine();
 
-                System.out.println(" You've entered the following information: ");
-                System.out.println("Name: " + name);
-                System.out.println("Address: " + address);
-                System.out.println("City: " + city + ", State: "+ state + ", Zip: " + zip);
-                System.out.println("Is this information correct?");
-                //Checks to make sure new info member is correct before creating new member
-            }while(!Utilities.confirm());
+            System.out.println(" You've entered the following information: ");
+            System.out.println("Name: " + name);
+            System.out.println("Address: " + address);
+            System.out.println("City: " + city + ", State: "+ state + ", Zip: " + zip);
+            System.out.println("Is this information correct?");
+            //Checks to make sure new info member is correct before creating new member
+        }while(!Utilities.confirm());
 
         ProviderRecord record = new ProviderRecord(0, name, address, city, state, zip);
         try {
@@ -484,8 +601,9 @@ public class ManagerInterface {
             ex.printStackTrace();
         }
     }
-    // TODO
-    private void editproviderInfo(){
+
+    //change one or more fields for an existing provider
+    private void editProviderInfo(){
         Scanner sc = new Scanner(System.in);
         int providerID = getValidProvider();
         ProviderRecord toChange = new ProviderRecord();
@@ -493,6 +611,11 @@ public class ManagerInterface {
         //user chose to return from getValidProvider
         if(providerID == -1)
             return;
+        try {
+            toChange = database.getProviderRecord(providerID);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
 
         Utilities.clearConsole();
         System.out.println("Name: " + toChange.name + "\nAddress: " + toChange.address + ", " + toChange.city + " " + toChange.state + " " + toChange.zip + "\nProvider ID: " + toChange.ID);
@@ -507,7 +630,8 @@ public class ManagerInterface {
                                 "\n2. Address" +
                                 "\n3. City" +
                                 "\n4. State" +
-                                "\n5. Go back" +
+                                "\n5. Go back, aborting changes" +
+                                "\n6. Submit changes" +
                                 "\nMake a selection: ");
 
                 // get valid user choice
@@ -519,7 +643,7 @@ public class ManagerInterface {
                         continue;
                     }
                     selection = sc.nextInt();
-                    if (selection <= 0 || selection > 5) {
+                    if (selection <= 0 || selection > 6) {
                         System.out.println("Invalid selection.\n");
                         sc.next();
                     } else {
@@ -527,7 +651,6 @@ public class ManagerInterface {
                     }
                 } while (!valid);
                 // enact user choice
-                // TODO: Finish this
                 switch (selection) {
                     case (1):
                         // change name
@@ -536,27 +659,75 @@ public class ManagerInterface {
                             System.out.println("Enter the new name, or enter 'x' to cancel: ");
                             if(sc.hasNext("x"))
                                 return;
+                            sc.nextLine();
                             newName = sc.nextLine();
+                            if(newName.length() > 45){ // cut off extra characters if too long
+                                newName = newName.substring(0, 45);
+                            }
                             System.out.println("Change " + toChange.name + " to " + newName + "?");
-                        } while(Utilities.confirm());
+                        } while(!Utilities.confirm());
+                        toChange.name = newName;
                         break;
                     case (2):
                         // change address
+                        String newAddress;
+                        do {
+                            System.out.println("Enter the new street address, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newAddress = sc.nextLine();
+                            if(newAddress.length() > 45){ // cut off extra characters if too long
+                                newAddress = newAddress.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.address + " to " + newAddress + "?");
+                        } while(!Utilities.confirm());
+                        toChange.address = newAddress;
                         break;
                     case (3):
                         // change city
+                        String newCity;
+                        do {
+                            System.out.println("Enter the new city, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newCity = sc.nextLine();
+                            if(newCity.length() > 45){ // cut off extra characters if too long
+                                newAddress = newCity.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.city+ " to " + newCity + "?");
+                        } while(!Utilities.confirm());
+                        toChange.city = newCity;
                         break;
                     case (4): // change state
+                        String newState;
+                        do {
+                            System.out.println("Enter the new state, or enter 'x' to cancel: ");
+                            if(sc.hasNext("x"))
+                                return;
+                            sc.nextLine();
+                            newState = sc.nextLine();
+                            if(newState.length() > 45){ // cut off extra characters if too long
+                                newState= newState.substring(0, 45);
+                            }
+                            System.out.println("Change " + toChange.state + " to " + newState + "?");
+                        } while(!Utilities.confirm());
+                        toChange.state = newState;
                         break;
-                    case (5): // go back
+                    case (5): // go back, aborting all changes
+                        return;
+                    case (6): // go back, aborting all changes
+                        //Ready to call replace function that hasn't been written yet *********
+                        //database.replaceProvider(providerID, toChange);
+                        System.out.println("Changes saved! Press enter to continue.");
+                        sc.nextLine();
                         return;
                     default: // fall through
                 }
                 System.out.println("Change another field?");
-            } while (Utilities.confirm());
+            } while (true);
         }
-        //Ready to call replace function that hasn't been written yet *********
-        //database.replaceProvider(providerID);
     }
 
     private void deleteProvider(){
