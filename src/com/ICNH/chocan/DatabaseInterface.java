@@ -195,6 +195,7 @@ public class DatabaseInterface {
         return record;
     }
 
+    // TODO this throws an exception. Is called by "ByProvider" and "ByMember" variants in ManagerInterface.provider/member report()
     private ArrayList<FullServiceRecord> getServices(int id, boolean provider) throws SQLException {
         ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>();
         PreparedStatement statement = connection.prepareStatement(

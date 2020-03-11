@@ -80,8 +80,7 @@ public class ManagerInterface {
     }
 
     // Create a provider report and save to Provider<providerID>Report.txt in reports directory
-    //report contains all services provided by the provider in the last 7 days
-    // TODO Figure out why fileOut.write isn't working here
+    //report contains all services logged by the provider in the last 7 days
     public void providerReport() {
         int providerID = getValidProvider();
         ProviderRecord provider = new ProviderRecord();
