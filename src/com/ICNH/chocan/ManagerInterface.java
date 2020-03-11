@@ -1,5 +1,6 @@
 package com.ICNH.chocan;
 
+import com.ICNH.chocan.records.FullServiceRecord;
 import com.ICNH.chocan.records.MemberRecord;
 import com.ICNH.chocan.records.ProviderRecord;
 
@@ -8,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class ManagerInterface {
     private DatabaseInterface database;
@@ -78,59 +80,36 @@ public class ManagerInterface {
     }
 
     // Create a provider report and save to Provider<providerID>Report.txt in reports directory
+    //report contains all services provided by the provider in the last 7 days
     // Return 0 for success, -1 for failure/user quits
     public int providerReport() {
-        int providerID;
-        Scanner in = new Scanner(System.in);
-        // Loop until user enters a valid provider ID that exists in the database
-        Utilities.clearConsole();
-        do {
-            System.out.print("Enter member ID to validate: ");
-            if(in.hasNext("x")){
-                return -1;
-            }
-            String input = in.nextLine();
-            // member ID must be a positive int
-            try {
-                providerID = Integer.parseInt(input);
-                if (providerID <= 0) {
-                    Utilities.clearConsole();
-                    System.out.println("Invalid Number. Member ID's are positive numerals.");
-                    providerID = 0;
-                    continue;
-                }
-            } catch (NumberFormatException ex) {
-                Utilities.clearConsole();
-                System.out.println("Invalid Number. Member ID's are positive numerals.");
-                providerID = 0;
-                continue;
-            }
-            // Check if provider ID is in database
-            try {
-                if(!database.validateProvider(providerID)){
-                    System.out.println("Provider ID " + providerID + " not found.");
-                }
-            }
-            catch(SQLException ex){
-                System.out.println("Error: SQL Exception thrown");
-                return -1;
-            }
-        } while (providerID == 0);
+        int providerID = getValidProvider();
+        ProviderRecord provider = new ProviderRecord();
 
-        // Write info to a provider-unique text file
+        //if user cancelled
+        if(providerID == -1)
+            return -1;
         try {
-            // Provider report must include provider info (ProviderRecord), all services for the past week,
-            // total number of consultations for that week, and total fees for that week
-            BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + providerID + "Report.txt"));
-            ProviderRecord providerInfo = database.getProviderRecord(providerID);
-            fileOut.write("Provider Name:    " + providerInfo.name + "\nProvider Number:  " + providerInfo.ID +
-                    "\nAddress:          " + providerInfo.address + "\n\t\t  " + providerInfo.city +
-                    ", " + providerInfo.state + " " + providerInfo.zip);
+            provider = database.getProviderRecord(providerID);
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
 
-            // TODO: fileOut.write services + total number of consultations + total fee for week. Requires new database functionality
-            // check out DatabaseInterface.getServicesByProvider
+        try {
+            // Member report must include member info (ProviderRecord) + (for each service provided) date, provider name, and service name
+            BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + providerID + "Report.txt"));
+            fileOut.write("Provider Name: " + provider.name + "\nProvider Number: " + provider.ID + "\nAddress: " +
+                    provider.address + ", " + provider.city + " " + provider.state + ", " + provider.zip);
+            ArrayList<FullServiceRecord> services = new ArrayList<>();
+            services = database.getServicesByProvider(providerID);
+            int listSize = services.size();
+            FullServiceRecord[] records = services.toArray(new FullServiceRecord[listSize]);
+            for(int i = 0; i < listSize; i++) {
+                fileOut.write("Service: " + records[i].serviceInfo.name + "\nMember: " + records[i].member.name + "\nDate: "
+                        + records[i].serviceDate.toString() + "\nFee: $" + records[i].serviceInfo.fee + "\nComments: " + records[i].comments + "\n\n");
+            }
             fileOut.close();
-        } catch (IOException | SQLException e) {
+        } catch (Exception e) {
             System.out.println("Error: Failed to generate report");
             return -1;
         }
@@ -140,53 +119,33 @@ public class ManagerInterface {
     // Create a member report and save to Member<memberID>Report.txt in reports directory
     // Return 0 for success, -1 for failure/user quits
     private int memberReport() {
-        int memberID = 0;
-        Scanner in = new Scanner(System.in);
-        // Loop until user enters a valid member ID that exists in the database
-        Utilities.clearConsole();
-        do {
-            System.out.print("Enter member ID to validate or \"x\" to quit: ");
-            if(in.hasNext("x")){
-                return -1;
-            }
-            String input = in.nextLine();
-            try {
+        int memberID = getValidMember();
+        MemberRecord memberInfo = new MemberRecord();
 
-                memberID = Integer.parseInt(input);
-                if (memberID <= 0) {
-                    Utilities.clearConsole();
-                    System.out.println("Invalid Number. Member ID's are positive numerals.");
-                    memberID = 0;
-                    continue;
-                }
-            } catch (NumberFormatException ex) {
-                Utilities.clearConsole();
-                System.out.println("Invalid Number. Member ID's are positive numerals.");
-                memberID = 0;
-                continue;
-            }
-            // Check if member ID is in database
-            try {
-                if(database.validateMember(memberID) == -1){
-                    System.out.println("Member ID " + memberID + " not found.");
-                }
-            }
-            catch(SQLException ex){
-                System.out.println("Error: SQL Exception thrown");
-                return -1;
-            }
-        } while (memberID == 0);
+        //if user cancelled
+        if(memberID == -1)
+            return -1;
+        try {
+            memberInfo = database.getMemberRecord(memberID);
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
 
         try {
             // Member report must include member info (MemberRecord) + (for each service provided) date, provider name, and service name
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Member" + memberID + "Report.txt"));
-            MemberRecord memberInfo = database.getMemberRecord(memberID);
-            fileOut.write("Member Name:      " + memberInfo.name + "\nMember Number:    " + memberInfo.ID + "\nAddress:          " +
-                    memberInfo.address + "\n\t\t  " + memberInfo.city + ", " + memberInfo.state + " " + memberInfo.zip);
-            // TODO: fileOut.write the services info (date, provider.name, and service.name for each service)
-            // check out DatabaseInterface.getServicesByMember
+            fileOut.write("Member Name: " + memberInfo.name + "\nMember Number: " + memberInfo.ID + "\nAddress: " +
+                    memberInfo.address + ", " + memberInfo.city + " " + memberInfo.state + ", " + memberInfo.zip);
+            ArrayList<FullServiceRecord> services = new ArrayList<>();
+            services = database.getServicesByMember(memberID);
+            int listSize = services.size();
+            FullServiceRecord[] records = services.toArray(new FullServiceRecord[listSize]);
+            for(int i = 0; i < listSize; i++) {
+                fileOut.write("Service: " + records[i].serviceInfo.name + "\nProvider: " + records[i].provider.name + "\nDate: "
+                        + records[i].serviceDate.toString() + "\nFee: $" + records[i].serviceInfo.fee + "\nComments: " + records[i].comments + "\n\n");
+            }
             fileOut.close();
-        } catch (IOException | SQLException e) {
+        } catch (Exception e) {
             System.out.println("Error: Failed to generate report");
             return -1;
         }
