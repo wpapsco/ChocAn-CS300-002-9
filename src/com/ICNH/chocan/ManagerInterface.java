@@ -470,9 +470,9 @@ public class ManagerInterface {
                 zip = sc.nextLine();
 
                 System.out.println(" You've entered the following information: ");
-                System.out.println("Name:" + name);
-                System.out.println("Address:" + address);
-                System.out.println(" City: " +city + ", State: "+ state + ", Zip: " + zip);
+                System.out.println("Name: " + name);
+                System.out.println("Address: " + address);
+                System.out.println("City: " + city + ", State: "+ state + ", Zip: " + zip);
                 System.out.println("Is this information correct?");
                 //Checks to make sure new info member is correct before creating new member
             }while(!Utilities.confirm());
@@ -481,25 +481,68 @@ public class ManagerInterface {
         ProviderRecord record = new ProviderRecord(0, name, address, city, state, zip);
         try {
             int providerId = database.insertProvider(record);
-            System.out.println("Provider (id " + providerId + ") created. ");
+            System.out.println("Provider (id " + providerId + ") created. Press enter to continue.");
+            sc.nextLine();
         }
         catch(SQLException ex){
-            System.out.println("Error: SQL Exception thrown");
+            ex.printStackTrace();
         }
     }
     private void editproviderInfo(){
         Scanner sc = new Scanner(System.in);
-        int providerID, providerStatus = -99;
+        int providerID = getValidProvider();
         //String name, address, city, zip, state;
+        //Ready to call edit function that hasn't been written yet *********
 
-        // Loop until user enters reasonable ID and exists in database
+        //database.editProvider(providerID);
+    }
+
+    private void deleteProvider(){
+        Scanner sc = new Scanner(System.in);
+        int providerID;
+        ProviderRecord toDelete = new ProviderRecord();
+        System.out.println("WARNING! Deleting a provider will remove all services logged by the provider from the system. Ensure all bills are paid before removal.");
+        System.out.println("Press enter to continue.");
+        sc.nextLine();
+
+        providerID = getValidProvider();
+        if(providerID == -1)
+            return;
+        try {
+            toDelete = database.getProviderRecord(providerID);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        Utilities.clearConsole();
+        System.out.println("Name: " + toDelete.name + "\nAddress: " + toDelete.address + ", " + toDelete.city + " " + toDelete.state + " " + toDelete.zip + "\nProvider ID: " + toDelete.ID);
+        System.out.println("Delete this provider?");
+        if(Utilities.confirm()){
+            // TODO call database remove method for provider. Method should also remove any services that link to the provider.
+            //database.removeProvider(providerID);
+            System.out.println("Provider removed.");
+        }
+        else {
+            System.out.println("Aborted");
+        }
+        System.out.println("Press enter to continue.");
+        sc.nextLine();
+    }
+
+    //gets valid provider ID from the user and returns the ID, or returns -1 if user cancels.
+    private int getValidProvider(){
+        Scanner sc = new Scanner(System.in);
+        int providerID, providerStatus = -1;
+
         Utilities.clearConsole();
         do {
             do {
-                System.out.print("Enter provider ID to validate: ");
+                System.out.print("Enter provider ID, or enter 'x' to return: ");
+                if(sc.hasNext("x"))
+                    return -1;
                 String input = sc.nextLine();
 
-                // member ID must be a positive int
+                // provider ID must be a positive int
                 try {
                     providerID = Integer.parseInt(input);
                     if (providerID <= 0) {
@@ -512,25 +555,22 @@ public class ManagerInterface {
                     System.out.println("Invalid Number. Provider ID's are positive numerals.");
                     providerID = 0;
                 }
-            } while (providerID== 0);
+            } while (providerID == 0);
             //Needs to check if memberID is valid/exists because a new member needs an ID that doesn't already exist.
             try {
-                if(database.validateProvider(providerID) == false){
-                    System.out.println("Provider ID does not exist. ");
-                    providerStatus = -1;
+                if(database.validateProvider(providerID)){
+                    providerStatus = 0;
+                }
+                else {
+                    Utilities.clearConsole();
+                    System.out.println("Provider ID not recognized.");
                 }
             }
             catch(SQLException ex){
-                System.out.println("Error: SQL Exception thrown");
+                ex.printStackTrace();
             }
         }while(providerStatus == -1); // Will continue to have user enter ID until valid provider ID is entered
 
-        //Ready to call edit function that hasn't been written yet *********
-
-        //database.editProvider();
-    }
-
-    public void deleteProvider(){
-
+        return providerID;
     }
 }
