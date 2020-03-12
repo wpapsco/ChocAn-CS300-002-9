@@ -100,8 +100,8 @@ public class ProviderInterface {
                 "Make a selection: ");
     }
 
-    // Check member ID number for status (valid: member ID is returned, suspended: -2, or invalid: -1)
-    private int checkID() {
+    // Check member ID number for status (valid: member ID is returned, suspended: -2, not found: -1, user quits: 0)
+    int checkID() {
         Scanner sc = new Scanner(System.in);
         int memberID;
 
@@ -110,7 +110,7 @@ public class ProviderInterface {
         do {
             System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
                 if(sc.hasNext("x")){
-                    return -1;
+                    return 0;
                 }
             String input = sc.nextLine();
 
@@ -339,7 +339,6 @@ public class ProviderInterface {
     // create "a Provider Directory, an alphabetically ordered list of service names and corresponding service codes and fees"
     // and save to Provider<providerID>Directory.txt> in reports directory
     private boolean generateDirectoryReport() {
-        // TODO: Maybe? Ask user for email address (theoretically, we'd email them the report) before making report
         // check out DatabaseInterface.getServiceInfos
         try {
             ArrayList<ServiceInfoRecord> recordList = database.getServiceInfos();
