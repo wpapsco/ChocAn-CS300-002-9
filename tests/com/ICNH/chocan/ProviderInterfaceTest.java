@@ -41,6 +41,7 @@ class ProviderInterfaceTest {
     void menu() {
     }
 
+    // CheckID Tests
     @Test // Tests that checkID returns with "x" input
     void testCheckIDReturn(){
         String input = "x";
@@ -98,4 +99,28 @@ class ProviderInterfaceTest {
         assertEquals(-1, Provface.checkID());
     }
     // TODO: testCheckIDValid, testCheckIDSuspended. I need the database interface remove function for these, so I can add & remove a test member
+
+    // logService Tests
+    @Test // Tests that logService quits if user quits checkID
+    void testLogServiceReturn(){
+        String input = "x";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    @Test // Tests that logService quits if checkID receives inappropriate input
+    void testLogServiceInvalidID(){
+        String input = "HelloWorld\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: testLogServiceSuspend, testLogServiceValid_XDate, testLogServiceValid_FutureDate, testLogServiceValid_XServiceCode,
+    //  testLogServiceValid_ServiceNotFound, testLogServiceValid_ServiceIDZero, testLogServiceValid_ServiceIDNegative,
+    //  testLogServiceValid_HappyPath
+    //  I need the database interface remove functions for these, so I can add & remove a test member
+
+    //
 }

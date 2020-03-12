@@ -58,7 +58,7 @@ public class ProviderInterface {
                 //still need to catch and process return values
                 case 1:
                     int validMember = checkID();
-                    if (validMember == -1)
+                    if (validMember == -1 || validMember == 0)
                         System.out.println("Member ID not recognized.");
                     else if (validMember == -2)
                         System.out.println("Suspended.");
@@ -148,10 +148,10 @@ public class ProviderInterface {
     }
 
     //log a service to the database
-    private boolean logService() {
+    boolean logService() {
         int member = checkID();
         //member ID not recognized
-        if (member == -1) {
+        if (member == -1 || member == 0) {
             Utilities.clearConsole();
             System.out.println("Member ID not recognized.");
             return false;
