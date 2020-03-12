@@ -195,7 +195,6 @@ public class DatabaseInterface {
         return record;
     }
 
-    // TODO this throws an exception. Is called by "ByProvider" and "ByMember" variants in ManagerInterface.provider/member report()
     private ArrayList<FullServiceRecord> getServices(int id, boolean provider) throws SQLException {
         ArrayList<FullServiceRecord> records = new ArrayList<FullServiceRecord>();
         PreparedStatement statement = connection.prepareStatement(
@@ -203,7 +202,7 @@ public class DatabaseInterface {
                         "INNER JOIN ServiceInfo ON Services.service_info = ServiceInfo.id) " +
                         "INNER JOIN Providers ON Services.provider = Providers.id) " +
                         "INNER JOIN Members ON Services.member = Members.id) " +
-                        "WHERE Services." + (provider ? "provider" : "member") + " = ?" +
+                        "WHERE Services." + (provider ? "provider" : "member") + " = ? " +
                         "AND (Services.service_date BETWEEN ? AND ?);");
 
         statement.setInt(1, id);
