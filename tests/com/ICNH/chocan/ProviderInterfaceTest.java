@@ -99,18 +99,18 @@ class ProviderInterfaceTest {
 
         assertEquals(-1, Provface.checkID());
     }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that checkID returns correct code when given a valid member's ID
     void testCheckIDValid(){
-        // TODO: Add member at start with ID = 256 and valid = true, remove member at end
         String input = "256\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
         assertEquals(256, Provface.checkID());
     }
+    // TODO: Add member at start with ID = 256 and valid = false, remove member at end
     @Test // Tests that checkID returns correct code when given a suspended member's ID
     void testCheckIDSuspended(){
-        // TODO: Add member at start with ID = 256 and valid = false, remove member at end
         String input = "256\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
@@ -135,10 +135,87 @@ class ProviderInterfaceTest {
 
         assertEquals(false, Provface.logService());
     }
-    // TODO: testLogServiceSuspend, testLogServiceValid_XDate, testLogServiceValid_FutureDate, testLogServiceValid_XServiceCode,
-    //  testLogServiceValid_ServiceNotFound, testLogServiceValid_ServiceIDZero, testLogServiceValid_ServiceIDNegative,
-    //  testLogServiceValid_HappyPath
-    //  I need the database interface remove functions for these, so I can add & remove a test member
+    // TODO: Add member at start with ID = 256 and valid = false, remove member at end
+    @Test // Tests that logService quits if checkID receives inappropriate input
+    void testLogServiceSuspended(){
+        String input = "256\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService quits if user enters x for the date
+    void testLogServiceValid_XDate(){
+        String input = "256\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService handles invalid dates appropriately
+    void testLogServiceValid_FutureDate(){
+        String input = "256\n01-01-2050\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService handles invalid dates appropriately
+    void testLogServiceValid_InvalidDate(){
+        String input = "256\n20-20-2020\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService quits if user enters x for service code
+    void testLogServiceValid_XServiceCode(){
+        String input = "256\n01-01-2020\nY\nx\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService handles invalid service names appropriately
+    void testLogServiceValid_ServiceNotFound(){
+        String input = "256\n01-01-2020\nY\ns\nNotAValidService\nx\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService rejects service ID 0
+    void testLogServiceValid_ServiceIDZero(){
+        String input = "256\n01-01-2020\nY\n0\nx\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService rejects negative service IDs
+    void testLogServiceValid_ServiceIDNegative(){
+        String input = "256\n01-01-2020\nY\n-24\nx\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.logService());
+    }
+    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+    @Test // Tests that logService creates a log successfully when all input is correct
+    void testLogServiceValid_HappyPath(){
+        String input = "256\n01-01-2020\nY\n1\nY\ntestLogServiceValid_HappyPath";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(true, Provface.logService());
+    }
 
     // checkProviderDirectory Tests
     @Test // Tests that checkProviderDirectory appropriately handles searching for a non-existant servic3
