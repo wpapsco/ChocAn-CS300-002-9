@@ -243,50 +243,110 @@ class ProviderInterfaceTest {
             fail();
         }
     }
-    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService quits if user enters x for service code
     void testLogServiceValid_XServiceCode(){
-        String input = "256\n01-01-2020\nY\nx\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+        MemberRecord memTest = new MemberRecord();
+        memTest.name = "Test";
+        memTest.address = "Test";
+        memTest.city = "Test";
+        memTest.state = "TE";
+        memTest.zip = "Test";
+        memTest.valid = true;
 
-        assertFalse(Provface.logService());
+        try {
+            int id = database.insertMember(memTest);
+            String input = id + "\n01-01-2020\nx";
+            InputStream in = new ByteArrayInputStream(input.getBytes());
+            System.setIn(in);
+            assertFalse(Provface.logService());
+            database.deleteMember(id);
+        } catch (SQLException e) {
+            fail();
+        }
     }
-    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService handles invalid service names appropriately
     void testLogServiceValid_ServiceNotFound(){
-        String input = "256\n01-01-2020\nY\ns\nNotAValidService\nx\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+        MemberRecord memTest = new MemberRecord();
+        memTest.name = "Test";
+        memTest.address = "Test";
+        memTest.city = "Test";
+        memTest.state = "TE";
+        memTest.zip = "Test";
+        memTest.valid = true;
 
-        assertFalse(Provface.logService());
+        try {
+            int id = database.insertMember(memTest);
+            String input = id + "\n01-01-2020\nY\ns\nPotato\nx\n";
+            InputStream in = new ByteArrayInputStream(input.getBytes());
+            System.setIn(in);
+            assertFalse(Provface.logService());
+            database.deleteMember(id);
+        } catch (SQLException e) {
+            fail();
+        }
     }
-    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService rejects service ID 0
     void testLogServiceValid_ServiceIDZero(){
-        String input = "256\n01-01-2020\nY\n0\nx\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+        MemberRecord memTest = new MemberRecord();
+        memTest.name = "Test";
+        memTest.address = "Test";
+        memTest.city = "Test";
+        memTest.state = "TE";
+        memTest.zip = "Test";
+        memTest.valid = true;
 
-        assertFalse(Provface.logService());
+        try {
+            int id = database.insertMember(memTest);
+            String input = id + "\n01-01-2020\nY\n0\nx\n";
+            InputStream in = new ByteArrayInputStream(input.getBytes());
+            System.setIn(in);
+            assertFalse(Provface.logService());
+            database.deleteMember(id);
+        } catch (SQLException e) {
+            fail();
+        }
     }
-    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService rejects negative service IDs
     void testLogServiceValid_ServiceIDNegative(){
-        String input = "256\n01-01-2020\nY\n-24\nx\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+        MemberRecord memTest = new MemberRecord();
+        memTest.name = "Test";
+        memTest.address = "Test";
+        memTest.city = "Test";
+        memTest.state = "TE";
+        memTest.zip = "Test";
+        memTest.valid = true;
 
-        assertFalse(Provface.logService());
+        try {
+            int id = database.insertMember(memTest);
+            String input = id + "\n01-01-2020\nY\n-24\nx\n";
+            InputStream in = new ByteArrayInputStream(input.getBytes());
+            System.setIn(in);
+            assertFalse(Provface.logService());
+            database.deleteMember(id);
+        } catch (SQLException e) {
+            fail();
+        }
     }
-    // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService creates a log successfully when all input is correct
     void testLogServiceValid_HappyPath(){
-        String input = "256\n01-01-2020\nY\n1\nY\ntestLogServiceValid_HappyPath";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+        MemberRecord memTest = new MemberRecord();
+        memTest.name = "Test";
+        memTest.address = "Test";
+        memTest.city = "Test";
+        memTest.state = "TE";
+        memTest.zip = "Test";
+        memTest.valid = true;
 
-        assertTrue(Provface.logService());
+        try {
+            int id = database.insertMember(memTest);
+            String input = id + "\n01-01-2020\nY\n1\nY\ntestLogServiceValid_HappyPath";
+            InputStream in = new ByteArrayInputStream(input.getBytes());
+            System.setIn(in);
+            assertTrue(Provface.logService());
+            database.deleteMember(id);
+        } catch (SQLException e) {
+            fail();
+        }
     }
 
     // checkProviderDirectory Tests
