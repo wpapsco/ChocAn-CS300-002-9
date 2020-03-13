@@ -181,11 +181,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit member
-                editMemberInfo(); // TODO: Needs database helper func. and testing. otherwise complete
+                editMemberInfo();
                 return;
             case(3):
                 // delete member
-                deleteMember(); // TODO: Needs database helper func. and testing. otherwise complete
+                deleteMember();
                 return;
             case(4): // fall through
             default: // fall through
@@ -345,8 +345,11 @@ public class ManagerInterface {
                     case (5): // go back, aborting all changes
                         return;
                     case (6): // go back, aborting all changes
-                        // TODO: Ready to call replace function that hasn't been written yet *********
-                        //database.replaceProvider(providerID, toChange);
+                        try {
+                            database.updateMember(toChange);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("Changes saved! Press enter to continue.");
                         sc.nextLine();
                         return;
@@ -378,8 +381,11 @@ public class ManagerInterface {
         System.out.println("Name: " + toDelete.name + "\nAddress: " + toDelete.address + ", " + toDelete.city + " " + toDelete.state + " " + toDelete.zip + "\nMember ID: " + toDelete.ID);
         System.out.println("Delete this member?");
         if(Utilities.confirm()){
-            // TODO call database remove method for member. Method should also remove any services that link to the member.
-            //database.removeMember(memberID);
+            try {
+                database.deleteMember(memberID);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             System.out.println("Member removed.");
         }
         else {
@@ -425,11 +431,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit provider
-                editProviderInfo(); // TODO: Needs database helper func. and testing. otherwise complete
+                editProviderInfo();
                 return;
             case(3):
                 // delete provider
-                deleteProvider(); // TODO: Needs database helper func. and testing. otherwise complete
+                deleteProvider();
                 return;
             case(4): // fall through
             default: // fall through
@@ -585,8 +591,11 @@ public class ManagerInterface {
                     case (5): // go back, aborting all changes
                         return;
                     case (6): // go back, aborting all changes
-                        //Ready to call replace function that hasn't been written yet *********
-                        //database.replaceProvider(providerID, toChange);
+                        try {
+                            database.updateProvider(toChange);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("Changes saved! Press enter to continue.");
                         sc.nextLine();
                         return;
@@ -618,7 +627,11 @@ public class ManagerInterface {
         System.out.println("Name: " + toDelete.name + "\nAddress: " + toDelete.address + ", " + toDelete.city + " " + toDelete.state + " " + toDelete.zip + "\nProvider ID: " + toDelete.ID);
         System.out.println("Delete this provider?");
         if(Utilities.confirm()){
-            // TODO call database remove method for provider. Method should also remove any services that link to the provider.
+            try {
+                database.deleteProvider(providerID);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             //database.removeProvider(providerID);
             System.out.println("Provider removed.");
         }
