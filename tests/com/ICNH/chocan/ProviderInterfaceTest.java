@@ -348,7 +348,7 @@ class ProviderInterfaceTest {
      */
 
     // checkProviderDirectory Tests
-    @Test // Tests that checkProviderDirectory appropriately handles searching for a non-existant servic3
+    @Test // Tests that checkProviderDirectory appropriately handles searching for a non-existent service
     void testCheckProviderDirectoryNotFound(){
         String input = "This Doesn't Exist\n\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
@@ -358,7 +358,7 @@ class ProviderInterfaceTest {
     }
     @Test // Tests that checkProviderDirectory appropriately handles searching for a valid service
     void testCheckProviderDirectoryFound(){
-        String input = "TestServiceInfo\n\n";
+        String input = "Chocolate Bath\n\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
