@@ -687,7 +687,7 @@ public class ManagerInterface {
         return providerID;
     }
     //gets valid provider ID from the user and returns the ID, or returns -1 if user cancels.
-    private int getValidMember(){
+    int getValidMember(){
         Scanner sc = new Scanner(System.in);
         int memberID, memberStatus = -1;
 
