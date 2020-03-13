@@ -29,6 +29,7 @@ public class Login {
                 loginInput.next();
                 System.out.print("1. Provider login.\n" +
                         "2. Manager login.\n" +
+                        "3. Exit Program\n" +
                         "Make a selection: ");
             }
             loginKey = loginInput.nextInt();
