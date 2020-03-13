@@ -292,7 +292,7 @@ public class ProviderInterface {
     }
 
     // asks the user for the name of a service and prints the service name, code, and fee if found.
-    private boolean checkProviderDirectory() {
+    boolean checkProviderDirectory() {
         // check out DatabaseInterface.getServicesByName
         Scanner sc = new Scanner(System.in);
         String service;
@@ -324,7 +324,7 @@ public class ProviderInterface {
     }
 
     //takes a service code as an argument and prints the service name then returns true if found. Else returns false
-    private boolean checkProviderDirectory(int serviceID) {
+    boolean checkProviderDirectory(int serviceID) {
         try {
             ServiceInfoRecord service = database.getServiceInfo(serviceID);
             if(service == null) return false;

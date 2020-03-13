@@ -1,5 +1,6 @@
 package com.ICNH.chocan;
 
+import com.ICNH.chocan.records.ServiceRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -122,5 +123,32 @@ class ProviderInterfaceTest {
     //  testLogServiceValid_HappyPath
     //  I need the database interface remove functions for these, so I can add & remove a test member
 
-    //
+    // checkProviderDirectory Tests
+    @Test // Tests that checkProviderDirectory appropriately handles searching for a non-existant servic3
+    void testCheckProviderDirectoryNotFound(){
+        String input = "This Doesn't Exist\n\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(false, Provface.checkProviderDirectory());
+    }
+    @Test // Tests that checkProviderDirectory appropriately handles searching for a valid service
+    void testCheckProviderDirectoryFound(){
+        String input = "ValidName\n\n"; // TODO: find the name of an actual valid service info record
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(true, Provface.checkProviderDirectory());
+    }
+
+    // checkProviderDirectory(int) Tests
+    @Test // Tests that checkProviderDirectory(int) returns false when given an invalid service ID
+    void testCheckProviderDirectoryInvalid(){
+        assertEquals(false, Provface.checkProviderDirectory(0));
+    }
+    @Test // Tests that checkProviderDirectory(int) returns true when given an valid service ID
+    void testCheckProviderDirectoryValid(){
+        assertEquals(true, Provface.checkProviderDirectory(1)); // TODO: find the id of an actual valid service info record
+    }
+
 }
