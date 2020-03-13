@@ -108,7 +108,7 @@ public class ProviderInterface {
         // Loop until user enters reasonable member ID
         Utilities.clearConsole();
         do {
-            System.out.print("Enter provider ID to validate, or enter 'x' to return: ");
+            System.out.print("Enter member ID to validate, or enter 'x' to return: ");
                 if(sc.hasNext("x")){
                     return 0;
                 }
