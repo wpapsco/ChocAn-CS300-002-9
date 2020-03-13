@@ -3,6 +3,7 @@ package com.ICNH.chocan;//This file defines the com.ICNH.ChocAn.DatabaseInterfac
 
 import com.ICNH.chocan.records.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -208,9 +209,16 @@ public class DatabaseInterface {
         statement.setInt(1, id);
         Calendar cal = Calendar.getInstance();
         cal.setTime(new java.util.Date());
-        statement.setDate(3, new Date(cal.getTimeInMillis()));
+//        Date date1 = new Date(cal.getTimeInMillis());
+//        statement.setDate(3, date1);
+//        cal.add(Calendar.DATE, -7);
+//        Date date2 = new Date(cal.getTimeInMillis());
+//        statement.setDate(2, date2);
+
+        statement.setObject(3, new Timestamp(cal.getTimeInMillis()));
         cal.add(Calendar.DATE, -7);
-        statement.setDate(2, new Date(cal.getTimeInMillis()));
+        statement.setObject(2, new Timestamp(cal.getTimeInMillis()));
+
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             records.add(readFullServiceRecord(results));
@@ -257,16 +265,16 @@ public class DatabaseInterface {
      * @return the id of the newly inserted service
      * @throws SQLException
      */
-    public int insertService(ServiceRecord record) throws SQLException {
+    public void insertService(ServiceRecord record) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO Services VALUES (?, ?, ?, ?, ?, ?);");
         statement.setInt(1, record.providerID);
         statement.setInt(2, record.memberID);
         statement.setInt(3, record.serviceID);
         statement.setString(4, record.comments);
         statement.setObject(5, new Timestamp(record.currentDate.getTime()));
+        Date date1 = new Date(record.serviceDate.getTime());
         statement.setDate(6, new Date(record.serviceDate.getTime()));
         statement.execute();
-        return getLastInsert();
     }
 
     /**
