@@ -308,9 +308,55 @@ public class DatabaseInterface {
         results.next();
         return results.getInt(1);
     }
-    // TODO Add a function that replaces a member record in the database with a new one supplied as a parameter "MemberRecord"
-    // The goal is to change the fields of the member's info in the software and pass the changes to the DB. So ID should remain the same.
-    // TODO Add a similar function for a provider record in the database, the goal is the same.
 
-    // TODO add a function that removes a provider or member from the database, as well as any services provided to/by them.
+    /**
+     * @param record the record to replace
+     * @throws SQLException
+     */
+    public void updateProvider(ProviderRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE Providers SET name = ?, address = ?, city = ?, state = ?, sip = ? WHERE id = ?;");
+        statement.setString(1, record.name);
+        statement.setString(2, record.address);
+        statement.setString(3, record.city);
+        statement.setString(4, record.state);
+        statement.setString(5, record.zip);
+        statement.setInt(6, record.ID);
+        statement.execute();
+    }
+
+    /**
+     * @param record the record to replace
+     * @throws SQLException
+     */
+    public void updateMember(MemberRecord record) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("UPDATE Members SET name = ?, address = ?, city = ?, state = ?, sip = ?, is_valid = ?, WHERE id = ?;");
+        statement.setString(1, record.name);
+        statement.setString(2, record.address);
+        statement.setString(3, record.city);
+        statement.setString(4, record.state);
+        statement.setString(5, record.zip);
+        statement.setInt(6, record.valid ? 1 : 0);
+        statement.setInt(7, record.ID);
+        statement.execute();
+    }
+
+    /**
+     * @param provider the provider id to delete
+     * @throws SQLException
+     */
+    public void deleteProvider(int provider) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM Providers WHERE id = ?;");
+        statement.setInt(1, provider);
+        statement.execute();
+    }
+
+    /**
+     * @param member the member id to delete
+     * @throws SQLException
+     */
+    public void deleteMember(int member) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("DELETE FROM Members WHERE id = ?");
+        statement.setInt(1, member);
+        statement.execute();
+    }
 }
