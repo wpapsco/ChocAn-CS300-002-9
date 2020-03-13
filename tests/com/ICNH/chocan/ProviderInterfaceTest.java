@@ -125,7 +125,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     @Test // Tests that logService quits if checkID receives inappropriate input
     void testLogServiceInvalidID(){
@@ -133,7 +133,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = false, remove member at end
     @Test // Tests that logService quits if checkID receives inappropriate input
@@ -142,7 +142,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService quits if user enters x for the date
@@ -151,7 +151,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService handles invalid dates appropriately
@@ -160,7 +160,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService handles invalid dates appropriately
@@ -169,7 +169,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService quits if user enters x for service code
@@ -178,7 +178,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService handles invalid service names appropriately
@@ -187,7 +187,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService rejects service ID 0
@@ -196,7 +196,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService rejects negative service IDs
@@ -205,7 +205,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.logService());
+        assertFalse(Provface.logService());
     }
     // TODO: Add member at start with ID = 256 and valid = true, remove member at end
     @Test // Tests that logService creates a log successfully when all input is correct
@@ -214,7 +214,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(true, Provface.logService());
+        assertTrue(Provface.logService());
     }
 
     // checkProviderDirectory Tests
@@ -224,7 +224,7 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(false, Provface.checkProviderDirectory());
+        assertFalse(Provface.checkProviderDirectory());
     }
     @Test // Tests that checkProviderDirectory appropriately handles searching for a valid service
     void testCheckProviderDirectoryFound(){
@@ -232,17 +232,17 @@ class ProviderInterfaceTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        assertEquals(true, Provface.checkProviderDirectory());
+        assertTrue(Provface.checkProviderDirectory());
     }
 
     // checkProviderDirectory(int) Tests
     @Test // Tests that checkProviderDirectory(int) returns false when given an invalid service ID
     void testCheckProviderDirectoryInvalid(){
-        assertEquals(false, Provface.checkProviderDirectory(0));
+        assertFalse(Provface.checkProviderDirectory(0));
     }
     @Test // Tests that checkProviderDirectory(int) returns true when given an valid service ID
     void testCheckProviderDirectoryValid(){
-        assertEquals(true, Provface.checkProviderDirectory(1)); // TODO: find the id of an actual valid service info record
+        assertTrue(Provface.checkProviderDirectory(1));
     }
 
 }
