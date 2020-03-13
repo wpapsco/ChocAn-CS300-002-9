@@ -314,7 +314,7 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     public void updateProvider(ProviderRecord record) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("UPDATE Providers SET name = ?, address = ?, city = ?, state = ?, sip = ? WHERE id = ?;");
+        PreparedStatement statement = connection.prepareStatement("UPDATE Providers SET name = ?, address = ?, city = ?, state = ?, zip = ? WHERE id = ?;");
         statement.setString(1, record.name);
         statement.setString(2, record.address);
         statement.setString(3, record.city);
