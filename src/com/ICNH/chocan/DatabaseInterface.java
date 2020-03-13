@@ -203,7 +203,7 @@ public class DatabaseInterface {
                         "INNER JOIN Providers ON Services.provider = Providers.id) " +
                         "INNER JOIN Members ON Services.member = Members.id) " +
                         "WHERE Services." + (provider ? "provider" : "member") + " = ? " +
-                        "AND (Services.cur_date BETWEEN ? AND ?);");
+                        "AND (Services.cur_time BETWEEN ? AND ?);");
 
         statement.setInt(1, id);
         Calendar cal = Calendar.getInstance();
