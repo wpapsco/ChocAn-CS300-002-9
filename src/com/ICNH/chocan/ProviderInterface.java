@@ -321,6 +321,7 @@ public class ProviderInterface {
         }
         System.out.println(listSize + " result(s) found for: " + service + ". \nPress enter to return.");
         sc.nextLine();
+        Utilities.clearConsole();
         return true;
     }
 
@@ -330,7 +331,6 @@ public class ProviderInterface {
             ServiceInfoRecord service = database.getServiceInfo(serviceID);
             if(service == null) return false;
             System.out.println("Service Name: " + service.name);
-            Utilities.clearConsole();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
