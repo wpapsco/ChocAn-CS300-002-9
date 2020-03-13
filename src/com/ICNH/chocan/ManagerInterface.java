@@ -181,11 +181,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit member
-                editMemberInfo(); // Needs database helper func. and testing. otherwise complete
+                editMemberInfo(); // TODO: Needs database helper func. and testing. otherwise complete
                 return;
             case(3):
                 // delete member
-                deleteMember(); // Needs database helper func. and testing. otherwise complete
+                deleteMember(); // TODO: Needs database helper func. and testing. otherwise complete
                 return;
             case(4): // fall through
             default: // fall through
@@ -345,7 +345,7 @@ public class ManagerInterface {
                     case (5): // go back, aborting all changes
                         return;
                     case (6): // go back, aborting all changes
-                        //Ready to call replace function that hasn't been written yet *********
+                        // TODO: Ready to call replace function that hasn't been written yet *********
                         //database.replaceProvider(providerID, toChange);
                         System.out.println("Changes saved! Press enter to continue.");
                         sc.nextLine();
@@ -425,11 +425,11 @@ public class ManagerInterface {
                 return;
             case(2):
                 // edit provider
-                editProviderInfo(); // Needs database helper func. and testing. otherwise complete
+                editProviderInfo(); // TODO: Needs database helper func. and testing. otherwise complete
                 return;
             case(3):
                 // delete provider
-                deleteProvider(); // Needs database helper func. and testing. otherwise complete
+                deleteProvider(); // TODO: Needs database helper func. and testing. otherwise complete
                 return;
             case(4): // fall through
             default: // fall through
