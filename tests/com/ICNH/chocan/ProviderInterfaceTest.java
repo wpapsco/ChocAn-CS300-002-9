@@ -1,7 +1,6 @@
 package com.ICNH.chocan;
 
 import com.ICNH.chocan.records.MemberRecord;
-import com.ICNH.chocan.records.ServiceRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,7 +110,7 @@ class ProviderInterfaceTest {
         memTest.valid = true;
         try {
             int id = database.insertMember(memTest);
-            String input = Integer.toString(id) + "\n";
+            String input = id + "\n";
             InputStream in = new ByteArrayInputStream(input.getBytes());
             System.setIn(in);
             assertEquals(id, Provface.checkID());
@@ -132,7 +131,7 @@ class ProviderInterfaceTest {
 
         try {
             int id = database.insertMember(memTest);
-            String input = Integer.toString(id) + "\n";
+            String input = id + "\n";
             InputStream in = new ByteArrayInputStream(input.getBytes());
             System.setIn(in);
             assertEquals(-2, Provface.checkID());
