@@ -244,6 +244,7 @@ public class DatabaseInterface {
     public ArrayList<ServiceInfoRecord> getServicesByName(String name) throws SQLException {
         ArrayList<ServiceInfoRecord> records = new ArrayList<>();
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM ServiceInfo WHERE name = ?);");
+        statement.setString(1, name);           //Added by Michael Fiddes in an attempt to fix a bug.
         ResultSet results = statement.executeQuery();
         while (results.next()) {
             records.add(readServiceInfoRecord(results));
