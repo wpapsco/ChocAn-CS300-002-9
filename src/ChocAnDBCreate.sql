@@ -77,17 +77,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Services` (
   CONSTRAINT `member`
     FOREIGN KEY (`member`)
     REFERENCES `mydb`.`Members` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `provider`
     FOREIGN KEY (`provider`)
     REFERENCES `mydb`.`Providers` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `service_info`
     FOREIGN KEY (`service_info`)
     REFERENCES `mydb`.`ServiceInfo` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
