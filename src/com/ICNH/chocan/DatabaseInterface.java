@@ -203,7 +203,7 @@ public class DatabaseInterface {
                         "INNER JOIN Providers ON Services.provider = Providers.id) " +
                         "INNER JOIN Members ON Services.member = Members.id) " +
                         "WHERE Services." + (provider ? "provider" : "member") + " = ? " +
-                        "AND (Services.cur_date BETWEEN ? AND ?);");
+                        "AND (Services.cur_time BETWEEN ? AND ?);");
 
         statement.setInt(1, id);
         Calendar cal = Calendar.getInstance();
@@ -314,7 +314,7 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     public void updateProvider(ProviderRecord record) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("UPDATE Providers SET name = ?, address = ?, city = ?, state = ?, sip = ? WHERE id = ?;");
+        PreparedStatement statement = connection.prepareStatement("UPDATE Providers SET name = ?, address = ?, city = ?, state = ?, zip = ? WHERE id = ?;");
         statement.setString(1, record.name);
         statement.setString(2, record.address);
         statement.setString(3, record.city);
@@ -329,7 +329,7 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     public void updateMember(MemberRecord record) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("UPDATE Members SET name = ?, address = ?, city = ?, state = ?, sip = ?, is_valid = ?, WHERE id = ?;");
+        PreparedStatement statement = connection.prepareStatement("UPDATE Members SET name = ?, address = ?, city = ?, state = ?, zip = ?, is_valid = ?, WHERE id = ?;");
         statement.setString(1, record.name);
         statement.setString(2, record.address);
         statement.setString(3, record.city);

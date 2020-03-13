@@ -37,18 +37,71 @@ class ManagerInterfaceTest {
         System.setErr(originalErr);
     }
 
-    @Test
+    // getValidProvider Tests
+    @Test // Test that getValidProvider handles x input correctly
     void testGetValidProviderReturn() {
-
         String input = "x";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-       // int output = Manface.getValidProvider();
-
-        //String content = outContent.toString();
-        //String differentName = "Invalid Number. Provider ID's are positive numerals.";
+        assertEquals(-1, Manface.getValidProvider());
+    }
+    @Test // Test that getValidProvider handles "0" input correctly
+    void testGetValidProviderZero() {
+        String input = "0\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         assertEquals(-1, Manface.getValidProvider());
+    }
+    @Test // Test that getValidProvider handles negative input correctly
+    void testGetValidProviderNegative() {
+        String input = "-24\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(-1, Manface.getValidProvider());
+    }
+    @Test // Test that getValidProvider handles valid input correctly
+    void testGetValidProviderValid() {
+        String input = "1\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(1, Manface.getValidProvider());
+    }
+
+    // getValidMember Tests
+    @Test // Test that getValidMember handles x input correctly
+    void testGetValidMemberReturn() {
+        String input = "x";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(-1, Manface.getValidMember());
+    }
+    @Test // Test that getValidMember handles "0" input correctly
+    void testGetValidMemberZero() {
+        String input = "0\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(-1, Manface.getValidMember());
+    }
+    @Test // Test that getValidMember handles negative input correctly
+    void testGetValidMemberNegative() {
+        String input = "-24\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(-1, Manface.getValidMember());
+    }
+    @Test // Test that getValidMember handles valid input correctly
+    void testGetValidMemberValid() {
+        String input = "1\nx";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(1, Manface.getValidMember());
     }
 }
