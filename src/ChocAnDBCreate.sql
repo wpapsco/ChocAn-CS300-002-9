@@ -52,9 +52,9 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `mydb`.`ServiceInfo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`ServiceInfo` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` UNSIGNED INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
-  `description` VARCHAR(45) NULL DEFAULT NULL,
+  `description` VARCHAR(1000) NULL DEFAULT NULL,
   `fee` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
