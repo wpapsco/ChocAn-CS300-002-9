@@ -13,6 +13,7 @@ public class ServiceRecord {
     public Date currentDate;
 
     public ServiceRecord() {
+        currentDate = new Date();
     }
 
     public ServiceRecord(int serviceID, int memberID, int providerID, String comments, Date serviceDate) {

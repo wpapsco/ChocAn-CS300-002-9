@@ -205,6 +205,7 @@ public class ProviderInterface {
             if (!Utilities.confirm()) {
                 theDate = null;
             }
+            log.serviceDate = theDate;
         }
 
         //get service code
