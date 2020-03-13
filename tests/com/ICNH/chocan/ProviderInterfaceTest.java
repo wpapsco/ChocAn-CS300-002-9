@@ -99,7 +99,24 @@ class ProviderInterfaceTest {
 
         assertEquals(-1, Provface.checkID());
     }
-    // TODO: testCheckIDValid, testCheckIDSuspended. I need the database interface remove function for these, so I can add & remove a test member
+    @Test // Tests that checkID returns correct code when given a valid member's ID
+    void testCheckIDValid(){
+        // TODO: Add member at start with ID = 256 and valid = true, remove member at end
+        String input = "256\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(256, Provface.checkID());
+    }
+    @Test // Tests that checkID returns correct code when given a suspended member's ID
+    void testCheckIDSuspended(){
+        // TODO: Add member at start with ID = 256 and valid = false, remove member at end
+        String input = "256\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertEquals(-2, Provface.checkID());
+    }
 
     // logService Tests
     @Test // Tests that logService quits if user quits checkID
@@ -134,7 +151,7 @@ class ProviderInterfaceTest {
     }
     @Test // Tests that checkProviderDirectory appropriately handles searching for a valid service
     void testCheckProviderDirectoryFound(){
-        String input = "ValidName\n\n"; // TODO: find the name of an actual valid service info record
+        String input = "TestServiceInfo\n\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 

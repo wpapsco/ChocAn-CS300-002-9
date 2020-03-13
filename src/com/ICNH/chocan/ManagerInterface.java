@@ -630,7 +630,7 @@ public class ManagerInterface {
     }
 
     //gets valid provider ID from the user and returns the ID, or returns -1 if user cancels.
-    private int getValidProvider(){
+    int getValidProvider(){
         Scanner sc = new Scanner(System.in);
         int providerID, providerStatus = -1;
 
