@@ -372,7 +372,7 @@ class ProviderInterfaceTest {
     }
     @Test // Tests that checkProviderDirectory(int) returns true when given an valid service ID
     void testCheckProviderDirectoryValid(){
-        assertTrue(Provface.checkProviderDirectory(1));
+        assertTrue(Provface.checkProviderDirectory(9));
     }
 
 }
