@@ -70,8 +70,8 @@ public class ManagerInterface {
     //print manager options menu to System.out
     private void printMenu() {
         System.out.println(
-                "1. Compile a service report for each provider.\n" +
-                        "2. Compile a service report for each member.\n" +
+                "1. Compile service report for a provider.\n" +
+                        "2. Compile service report for a member.\n" +
                         "3. Add, remove, or update provider info.\n" +
                         "4. Add, remove, or update member info.\n" +
                         "5. Logout.\n" +
@@ -97,7 +97,7 @@ public class ManagerInterface {
             // Member report must include member info (ProviderRecord) + (for each service provided) date, provider name, and service name
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Provider" + providerID + "Report.txt"));
             fileOut.write("Provider Name: " + provider.name + "\nProvider Number: " + provider.ID + "\nAddress: " +
-                    provider.address + ", " + provider.city + " " + provider.state + ", " + provider.zip);
+                    provider.address + ", " + provider.city + " " + provider.state + ", " + provider.zip + "\n\n");
             ArrayList<FullServiceRecord> services = database.getServicesByProvider(providerID);
             int listSize = services.size();
             FullServiceRecord[] records = services.toArray(new FullServiceRecord[listSize]);
@@ -129,7 +129,7 @@ public class ManagerInterface {
             // Member report must include member info (MemberRecord) + (for each service provided) date, provider name, and service name
             BufferedWriter fileOut = new BufferedWriter(new FileWriter("reports/Member" + memberID + "Report.txt"));
             fileOut.write("Member Name: " + memberInfo.name + "\nMember Number: " + memberInfo.ID + "\nAddress: " +
-                    memberInfo.address + ", " + memberInfo.city + " " + memberInfo.state + ", " + memberInfo.zip);
+                    memberInfo.address + ", " + memberInfo.city + " " + memberInfo.state + ", " + memberInfo.zip + "\n\n");
             ArrayList<FullServiceRecord> services = new ArrayList<>();
             services = database.getServicesByMember(memberID);
             int listSize = services.size();
