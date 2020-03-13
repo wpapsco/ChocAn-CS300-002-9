@@ -3,6 +3,8 @@ package com.ICNH.chocan;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 
 public class Login {
 
@@ -19,6 +21,7 @@ public class Login {
         do {
             System.out.print("1. Provider login.\n" +
                     "2. Manager login.\n" +
+                    "3. Exit Program\n" +
                     "Make a selection: ");
             while (!loginInput.hasNextInt()) {
                 Utilities.clearConsole();
@@ -26,14 +29,15 @@ public class Login {
                 loginInput.next();
                 System.out.print("1. Provider login.\n" +
                         "2. Manager login.\n" +
+                        "3. Exit Program\n" +
                         "Make a selection: ");
             }
             loginKey = loginInput.nextInt();
-            if (loginKey != 1 && loginKey != 2) {
+            if (loginKey != 1 && loginKey != 2 && loginKey != 3) {
                 Utilities.clearConsole();
                 System.out.println("Invalid selection.\n");
             }
-        } while (loginKey != 1 && loginKey != 2);
+        } while (loginKey != 1 && loginKey != 2 && loginKey != 3);
 
         switch (loginKey) {
             case 1:
@@ -42,6 +46,8 @@ public class Login {
             case 2:
                 managerLogin();
                 break;
+            case 3:
+                exit(0);
             default:
                 break;
         }
