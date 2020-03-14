@@ -102,7 +102,7 @@ public class ManagerInterface {
             int listSize = services.size();
             FullServiceRecord[] records = services.toArray(new FullServiceRecord[listSize]);
             for(int i = 0; i < listSize; i++) {
-                fileOut.write("Service: " + records[i].serviceInfo.name + "\nMember: " + records[i].member.name + "\nDate: "
+                fileOut.write("Service: " + records[i].serviceInfo.name + "\nMember: " + records[i].member.name + "\nService Date: "
                         + records[i].serviceDate.toString() + "\nFee: $" + records[i].serviceInfo.fee + "\nComments: " + records[i].comments + "\n\n");
             }
             fileOut.close();
@@ -135,7 +135,7 @@ public class ManagerInterface {
             int listSize = services.size();
             FullServiceRecord[] records = services.toArray(new FullServiceRecord[listSize]);
             for(int i = 0; i < listSize; i++) {
-                fileOut.write("Service: " + records[i].serviceInfo.name + "\nProvider: " + records[i].provider.name + "\nDate: "
+                fileOut.write("Service: " + records[i].serviceInfo.name + "\nProvider: " + records[i].provider.name + "\nService Date: "
                         + records[i].serviceDate.toString() + "\nFee: $" + records[i].serviceInfo.fee + "\nComments: " + records[i].comments + "\n\n");
             }
             fileOut.close();
