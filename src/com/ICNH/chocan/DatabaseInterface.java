@@ -337,7 +337,7 @@ public class DatabaseInterface {
      * @throws SQLException
      */
     public void updateMember(MemberRecord record) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("UPDATE Members SET name = ?, address = ?, city = ?, state = ?, zip = ?, is_valid = ?, WHERE id = ?;");
+        PreparedStatement statement = connection.prepareStatement("UPDATE Members SET name = ?, address = ?, city = ?, state = ?, zip = ?, is_valid = ? WHERE id = ?;");
         statement.setString(1, record.name);
         statement.setString(2, record.address);
         statement.setString(3, record.city);
