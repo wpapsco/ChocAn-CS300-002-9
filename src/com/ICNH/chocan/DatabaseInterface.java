@@ -23,7 +23,7 @@ public class DatabaseInterface {
     }
 
     /**
-     * @param results the ResultsSet to read from
+     * @parm results the ResultsSet to read from
      * @return a single ServiceInfoRecord from the ResultsSet
      * @throws SQLException
      */
